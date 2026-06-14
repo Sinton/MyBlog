@@ -1,0 +1,67 @@
+---
+title: 改报头和栏目
+description: 从 theme.config.ts 开始，把样报换成你自己的刊名、导航、版次和社交链接。
+order: 2
+category: Guide
+updated: 2026-06-14
+---
+
+站点级信息集中在 `src/theme.config.ts`。这一步像给报纸换刊名：不动版式，先把站点身份、栏目顺序、版次信息和外链换成自己的。
+
+## 报头信息
+
+`siteTitle` 用于 `<title>`、默认描述和报头的可访问文本。当前可见的大标题仍在 `src/components/Masthead.astro` 里按四个字分别排版，这是为了精确控制报头字形。
+
+`siteSubtitle` 显示在顶部黑条，`issue`、`since`、`location` 和 `frequency` 显示在报头两侧。
+
+```ts
+export const themeConfig = {
+  siteTitle: "铅字旧报",
+  siteSubtitle: "Astro Newspaper Theme",
+  issue: "第一卷 第一号",
+  since: "2026",
+  location: "Theme Desk",
+  frequency: "周刊",
+};
+```
+
+如果你要把“我的晚报”改成另一个四字报头，先改 `themeConfig.siteTitle`，再到 `Masthead.astro` 替换四个 `masthead__glyph` 文本。这样既保留配置能力，也保留原来的手工报头味道。
+
+```astro
+<span class="masthead__glyph masthead__glyph--wo">我</span>
+<span class="masthead__glyph masthead__glyph--de">的</span>
+<span class="masthead__glyph masthead__glyph--wan">晚</span>
+<span class="masthead__glyph masthead__glyph--bao">报</span>
+```
+
+如果不是四字报头，需要同步调整 `Masthead.astro` 和对应 CSS。主题默认先服务四字中文报头。
+
+## 导航
+
+`navItems` 决定主导航顺序。推荐保留“头版 -> 案例 -> 专栏 -> 说明书 -> 关于”的节奏：先看样张，再看文章，再查说明书，最后了解主题。
+
+```ts
+navItems: [
+  { label: "头版", href: "/" },
+  { label: "案例", href: "/projects/" },
+  { label: "专栏", href: "/articles/" },
+  { label: "说明书", href: "/docs/" },
+  { label: "关于", href: "/about/" },
+],
+```
+
+新增页面时，先在 `src/pages` 下创建路由，再把入口加入 `navItems`。比如要加 `/notes/`，可以创建 `src/pages/notes/index.astro`，再增加：
+
+```ts
+{ label: "札记", href: "/notes/" }
+```
+
+## 社交链接
+
+`socialLinks` 的地址会被报头右上角的 SVG 图标读取。默认组件保留 GitHub 和 X 两个写死图标，只把链接地址交给配置文件。
+
+如果你要增加 RSS、邮箱或其他图标，需要在 `Masthead.astro` 里补一个对应的 SVG 块，再从 `themeConfig.socialLinks` 里读取地址。
+
+## 页面描述
+
+`description` 会进入默认 meta description，也会被首页等页面作为站点介绍使用。把它写成一句能说明站点定位的话，不要只写“个人博客”。

@@ -1,0 +1,42 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Masthead from "@/components/Masthead.astro";
+import WorkCard from "@/components/WorkCard.astro";
+
+const projects = (await getCollection("projects")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<BaseLayout title="案例" description="旧报纸主题的项目样张与版面能力">
+  <Masthead />
+  <main class="archive-page">
+    <header class="archive-header">
+      <h1 class="section-kicker archive-header__kicker-title">案例</h1>
+      <p class="archive-header__wide-copy">
+        这里不是占位作品集，而是两张主题样报：一张看整站如何落版，一张看组件如何拆用。
+        你可以把同样的结构换成作品、产品、开源项目或课程介绍。
+      </p>
+    </header>
+
+    <section class="works-grid works-grid--archive">
+      <div class="works-grid__inner">
+        {
+          projects.map((project) => (
+            <WorkCard
+              href={`/projects/${project.id}/`}
+              title={project.data.title}
+              subtitle={project.data.subtitle}
+              deck={project.data.deck}
+              category={project.data.category}
+              year={project.data.year}
+              platform={project.data.platform}
+              accent={project.data.accent}
+            />
+          ))
+        }
+      </div>
+    </section>
+  </main>
+</BaseLayout>

@@ -1,0 +1,82 @@
+---
+title: 三类稿件怎么放
+description: 用 docs、articles、projects 把说明、专栏和案例分开，站点才像一份有栏目表的报纸。
+order: 3
+category: Reference
+updated: 2026-06-14
+---
+
+主题只保留三类内容集合：说明书、专栏、案例。集合定义在 `src/content.config.ts`，页面会直接读取这些字段生成头版摘要、归档列表和详情页。
+
+## docs
+
+`docs` 用于说明书。它按 `order` 升序排列，不用日期决定顺序，适合放安装、配置、迁移和发布说明。
+
+```yaml
+title: 先把样报跑起来
+description: 安装依赖、启动开发服务器，并按顺序确认主题默认页面。
+order: 1
+category: Guide
+updated: 2026-06-14
+```
+
+字段说明：
+
+- `title`：列表页和详情页标题。
+- `description`：列表摘要和页面描述。
+- `order`：说明书排序，数字越小越靠前。
+- `category`：显示在条目上的分类标签。
+- `updated`：可选，显示更新时间。
+
+## articles
+
+`articles` 用于普通文章、专栏、札记和更新日志。列表页按 `date` 倒序排列，`tags` 会进入左侧索引词筛选。
+
+```yaml
+title: 给长文留出索引词和目次
+description: 说明文章页的摘要、标签和二级标题如何工作
+date: 2026-06-14
+category: Editorial
+tags: ["Astro", "Theme"]
+```
+
+字段说明：
+
+- `date`：决定文章列表排序。
+- `category`：显示为文章栏目。
+- `tags`：进入专栏页左侧筛选。
+- `featured`：可选，保留给首页或后续扩展使用。
+
+## projects
+
+`projects` 用于作品、产品、案例或主题样张。它比文章多一些结构化字段，因为项目页要承担“展示价值”的任务：一句话摘要、档案栏、功能分栏、迭代记录和截图区域都可能用到。
+
+常用字段包括 `subtitle`、`deck`、`platform`、`status`、`year`、`order`、`featured`、`accent`、`stack`、`facts`、`features`、`timeline`、`screenshots` 和 `links`。
+
+如果只想写一篇简单案例，保留标题、摘要和正文即可；字段越多，页面越像一篇完整的项目报道。
+
+最小案例：
+
+```yaml
+title: 我的项目
+subtitle: 一句话说明项目
+deck: 两三句话介绍项目价值
+year: 2026
+order: 3
+featured: false
+```
+
+首页会优先展示 `featured: true` 的案例。如果多个案例都标记为 featured，当前会取排序后的第一个。
+
+## 图片和 MDX 组件
+
+普通文章可以直接使用 Markdown 图片。案例截图建议放在对应项目目录里，例如：
+
+```text
+src/content/projects/my-project/
+  index.mdx
+  screenshots/
+    cover.png
+```
+
+然后在 `screenshots` 字段里引用文件名。旧文章如果引入了个人项目里的 MDX 组件，需要确认组件仍然存在；主题不会默认保留所有个人组件。

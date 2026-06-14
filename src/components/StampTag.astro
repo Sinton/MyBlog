@@ -1,0 +1,10 @@
+---
+interface Props {
+  label: string;
+  tone?: "red" | "blue" | "green" | "gold" | "ink";
+}
+
+const { label, tone = "ink" } = Astro.props;
+---
+
+<span class={`stamp stamp--${tone}`}>{label}</span>

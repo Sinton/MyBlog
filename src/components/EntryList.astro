@@ -1,0 +1,52 @@
+---
+import { formatDate } from "@/lib/format";
+
+interface EntryItem {
+  id: string;
+  data: {
+    title: string;
+    description: string;
+    date: Date;
+    category?: string;
+    location?: string;
+    region?: string;
+  };
+}
+
+interface Props {
+  entries: EntryItem[];
+  basePath: string;
+  label: string;
+}
+
+const { entries, basePath, label } = Astro.props;
+
+const categoryLabels: Record<string, string> = {
+  Editorial: "编者按",
+  Tech: "技术专栏",
+  Economics: "经济观察",
+};
+
+const displayMeta = (entry: EntryItem) => {
+  const meta = entry.data.category ?? entry.data.location ?? entry.data.region;
+  return meta ? (categoryLabels[meta] ?? meta) : "";
+};
+---
+
+<section class="entry-list" aria-label={label}>
+  <div class="section-kicker">{label}</div>
+  {
+    entries.map((entry) => (
+      <article class="entry-list__item">
+        <a href={`${basePath}/${entry.id}/`}>
+          <span class="entry-list__date">{formatDate(entry.data.date)}</span>
+          <h3>{entry.data.title}</h3>
+          <p>{entry.data.description}</p>
+          <span class="entry-list__meta">
+            {displayMeta(entry)}
+          </span>
+        </a>
+      </article>
+    ))
+  }
+</section>

@@ -1,0 +1,104 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Masthead from "@/components/Masthead.astro";
+import StampTag from "@/components/StampTag.astro";
+import { themeConfig } from "@/theme.config";
+
+const githubLink = themeConfig.socialLinks.find(
+  (link) => link.label.toLowerCase() === "github",
+);
+---
+
+<BaseLayout
+  title="关于"
+  description={`${themeConfig.siteTitle} 是我从个人博客里抽出来的一套 Astro 旧报纸主题。`}
+>
+  <Masthead />
+  <main class="detail-page about-page">
+    <header class="archive-header">
+      <h1 class="section-kicker archive-header__kicker-title">关于</h1>
+      <p class="archive-header__wide-copy">
+        这里像一张刊尾启事，写给准备拿这套主题开站的人。
+      </p>
+    </header>
+
+    <section class="about-profile" aria-labelledby="about-title">
+      <div class="about-profile__lead">
+        <StampTag label="编辑部启事" tone="red" />
+        <h2 id="about-title">我想把博客做得像一份有版面的晚报</h2>
+        <p>
+          这套主题最早来自一个个人博客。我喜欢旧报纸那种有头版、有边栏、有栏目名的秩序，所以没有把它做成常见的卡片流，而是把首页、专栏、说明书和案例页都当成一张张版面来排。
+        </p>
+        <p>
+          抽成主题以后，我希望别人拿到它时，不需要先拆原博客里的内容，也不需要从零写样式。改掉刊名，换掉样稿，放进自己的文章，就能先得到一份完整的旧报纸风格站点。
+        </p>
+      </div>
+
+      <aside class="about-ledger" aria-label="主题档案">
+        <div class="about-ledger__title">主题档案</div>
+        <dl>
+          <div>
+            <dt>来源</dt>
+            <dd>从个人博客抽出的 Astro 主题</dd>
+          </div>
+          <div>
+            <dt>保留</dt>
+            <dd>头版、案例、专栏、说明书、关于</dd>
+          </div>
+          <div>
+            <dt>内容</dt>
+            <dd>docs / articles / projects</dd>
+          </div>
+          <div>
+            <dt>取舍</dt>
+            <dd>只留通用博客能力，不预设重型业务模块</dd>
+          </div>
+          {
+            githubLink && (
+              <div>
+                <dt>源码</dt>
+                <dd>
+                  <a href={githubLink.href}>{githubLink.label}</a>
+                </dd>
+              </div>
+            )
+          }
+        </dl>
+      </aside>
+    </section>
+
+    <section class="about-sections" aria-label="主题说明">
+      <article>
+        <span>01</span>
+        <h2>为什么是旧报纸</h2>
+        <p>
+          旧报纸不是一层皮。它的好处是能把内容分出轻重：头版给重点，专栏放长文，边栏收索引，读者不用在一串文章流里猜。
+        </p>
+      </article>
+      <article>
+        <span>02</span>
+        <h2>为什么要抽成主题</h2>
+        <p>
+          原来的博客里有太多只适合原站点的内容。做成主题以后，我只保留版式、组件和示例稿，让它更适合被别人 fork。
+        </p>
+      </article>
+      <article>
+        <span>03</span>
+        <h2>我没有放什么</h2>
+        <p>
+          评论区、后台、账号系统和重型数据模块都没有内置。它们太依赖具体站点的需求，放进主题反而会让模板变重。
+        </p>
+      </article>
+    </section>
+
+    <section class="about-column prose" aria-label="主题范围">
+      <h2>如果你准备使用它</h2>
+      <p>
+        我建议先不要急着改样式。先打开 `src/theme.config.ts`，把刊名、副标题、导航和社交链接换成自己的；再到 `src/content`，把说明书、专栏和案例样稿换成自己的内容。
+      </p>
+      <p>
+        等这些基础内容跑通以后，再决定要不要新增评论、地图、相册或其他页面。主题先把报纸版式打好底，剩下的功能应该跟着你的站点慢慢长出来。
+      </p>
+    </section>
+  </main>
+</BaseLayout>

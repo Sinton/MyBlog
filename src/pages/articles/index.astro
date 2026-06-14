@@ -1,0 +1,131 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Masthead from "@/components/Masthead.astro";
+import { formatDate, sortByDateDesc } from "@/lib/format";
+
+const articles = sortByDateDesc(await getCollection("articles"));
+const primaryTags = Array.from(
+  new Set(articles.flatMap((article) => article.data.tags)),
+).map((label) => ({
+  label,
+  tags: [label],
+  count: articles.filter((article) => article.data.tags.includes(label)).length,
+}));
+---
+
+<BaseLayout title="专栏" description="旧报纸主题的写作样稿与排版说明">
+  <Masthead />
+  <main class="archive-page">
+    <header class="archive-header">
+      <h1 class="section-kicker archive-header__kicker-title">专栏</h1>
+      <p>
+        专栏页放两篇样稿：一篇讲头版怎么组织信息，一篇讲长文怎么保留目次和索引。
+        读它们时也可以顺手检查文章页的真实阅读质感。
+      </p>
+    </header>
+    <section class="article-index-layout" data-article-filter>
+      <aside class="article-filter" aria-label="文章索引词">
+        <div class="article-filter__header">
+          <span class="section-kicker">主题</span>
+        </div>
+        <div class="article-filter__terms">
+          <button type="button" class="is-active" data-filter-tag="all">
+            <span>全部</span>
+            <em>{articles.length}</em>
+          </button>
+          {
+            primaryTags.map((term) => (
+              <button
+                type="button"
+                data-filter-tag={term.label}
+                data-filter-tags={JSON.stringify(term.tags)}
+              >
+                <span>{term.label}</span>
+                <em>{term.count}</em>
+              </button>
+            ))
+          }
+        </div>
+      </aside>
+
+      <section class="entry-list article-filter__list" aria-label="全部专栏">
+        <div class="article-filter__list-heading">
+          <span class="section-kicker article-filter__list-label" data-article-filter-label>
+            全部专栏
+          </span>
+          <span class="sr-only" data-article-filter-count aria-live="polite">
+            本栏检出 {articles.length} 篇
+          </span>
+        </div>
+        {
+          articles.map((article) => (
+            <article
+              class="entry-list__item"
+              data-article-entry
+              data-tags={JSON.stringify(article.data.tags)}
+            >
+              <a href={`/articles/${article.id}/`}>
+                <span class="entry-list__date">{formatDate(article.data.date)}</span>
+                <h3>{article.data.title}</h3>
+                <p>{article.data.description}</p>
+                <span class="entry-list__meta">{article.data.category}</span>
+              </a>
+            </article>
+          ))
+        }
+      </section>
+    </section>
+  </main>
+</BaseLayout>
+
+<script>
+  const filterRoot = document.querySelector("[data-article-filter]");
+  const entries = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-article-entry]"),
+  );
+  const countNode = document.querySelector("[data-article-filter-count]");
+  const labelNode = document.querySelector("[data-article-filter-label]");
+
+  if (filterRoot && countNode && labelNode) {
+    const buttons = Array.from(
+      filterRoot.querySelectorAll("[data-filter-tag]"),
+    );
+
+    const setActiveTag = (tag: string) => {
+      let visibleCount = 0;
+
+      const activeButton = buttons.find(
+        (button) => button.getAttribute("data-filter-tag") === tag,
+      );
+      const filterTags = JSON.parse(
+        activeButton?.getAttribute("data-filter-tags") || "[]",
+      );
+
+      entries.forEach((entry) => {
+        const tags = JSON.parse(entry.getAttribute("data-tags") || "[]");
+        const isVisible =
+          tag === "all" ||
+          filterTags.some((filterTag: string) => tags.includes(filterTag));
+        entry.hidden = !isVisible;
+        if (isVisible) visibleCount += 1;
+      });
+
+      buttons.forEach((button) => {
+        button.classList.toggle(
+          "is-active",
+          button.getAttribute("data-filter-tag") === tag,
+        );
+      });
+
+      countNode.textContent = `本栏检出 ${visibleCount} 篇`;
+      labelNode.textContent = tag === "all" ? "全部专栏" : `索引词：${tag}`;
+    };
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        setActiveTag(button.getAttribute("data-filter-tag") || "all");
+      });
+    });
+  }
+</script>

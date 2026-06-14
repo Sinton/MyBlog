@@ -1,0 +1,186 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Masthead from "@/components/Masthead.astro";
+import StampTag from "@/components/StampTag.astro";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  const normalizeProjectId = (id: string) => id.replace(/\/index$/, "");
+
+  return projects.map((entry) => ({
+    params: { id: normalizeProjectId(entry.id) },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const entrySlug = entry.id.replace(/\/index$/, "");
+const screenshotImages = import.meta.glob(
+  "/src/content/projects/*/screenshots/*.{png,jpg,jpeg,webp}",
+  { eager: true, import: "default" },
+) as Record<string, { src: string; width: number; height: number }>;
+
+const statusText = entry.data.status;
+const platformText = entry.data.platform;
+const fallbackFacts = [{ label: "平台", value: platformText }];
+const specFacts = entry.data.facts.length > 0 ? entry.data.facts : fallbackFacts;
+const screenshots = entry.data.screenshots.flatMap((item) => {
+  const image =
+    screenshotImages[`/src/content/projects/${entrySlug}/screenshots/${item.src}`];
+
+  return image ? [{ ...item, image }] : [];
+});
+const featuredScreenshot =
+  screenshots.find((item) => item.featured) ?? screenshots[0] ?? null;
+const hasShowcase =
+  entry.data.briefs.length > 0 ||
+  entry.data.scenes.length > 0 ||
+  entry.data.features.length > 0 ||
+  screenshots.length > 0 ||
+  entry.data.timeline.length > 0;
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.deck || entry.data.description}>
+  <Masthead />
+  <main class="detail-page">
+    <article class={`report report--${entry.data.accent}`}>
+      <header class="report__header">
+        <div class="report__meta">
+          <StampTag label={entry.data.category} tone={entry.data.accent} />
+          <span>{entry.data.year}</span>
+          <span>{statusText}</span>
+        </div>
+        <h1>{entry.data.title}</h1>
+        <p class="report__subtitle">{entry.data.subtitle}</p>
+        <p class="report__deck">{entry.data.deck}</p>
+      </header>
+
+      <section class="report__spec" aria-label="案例档案">
+        <h2>案例档案</h2>
+        <dl>
+          {specFacts.map((fact) => (
+            <div>
+              <dt>{fact.label}</dt>
+              <dd>{fact.value}</dd>
+            </div>
+          ))}
+        </dl>
+        {
+          entry.data.stack.length > 0 && (
+            <div class="report__stack" aria-label="技术栈">
+              <span>技术栈</span>
+              <ul>
+                {entry.data.stack.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+        {
+          entry.data.links.length > 0 && (
+            <div class="report__links">
+              {entry.data.links.map((link) => (
+                <a href={link.href}>{link.label}</a>
+              ))}
+            </div>
+          )
+        }
+      </section>
+
+      <div class="prose report__content">
+        {
+          hasShowcase && (
+            <section class="work-showcase" aria-label="案例展示">
+              {
+                entry.data.briefs.length > 0 && (
+                  <section class="work-briefs" aria-label="本案速览">
+                    <span class="work-showcase__stamp">本案速览</span>
+                    <ul>
+                      {entry.data.briefs.map((item) => (
+                        <li>{item}</li>
+                      ))}
+                    </ul>
+                  </section>
+                )
+              }
+
+              {
+                featuredScreenshot && (
+                  <section
+                    class="work-screenshots"
+                    aria-label="案例样张"
+                    data-work-gallery
+                  >
+                    <div class="work-showcase__heading">
+                      <span>案例样张</span>
+                    </div>
+                    <figure class="work-screenshots__lead">
+                      <div class="work-screenshots__frame">
+                        <img
+                          src={featuredScreenshot.image.src}
+                          width={featuredScreenshot.image.width}
+                          height={featuredScreenshot.image.height}
+                          alt={featuredScreenshot.alt}
+                          loading="eager"
+                          decoding="async"
+                          data-gallery-image
+                        />
+                      </div>
+                      <figcaption>
+                        <strong data-gallery-title>{featuredScreenshot.title}</strong>
+                        <span data-gallery-caption>{featuredScreenshot.caption}</span>
+                      </figcaption>
+                    </figure>
+                  </section>
+                )
+              }
+
+              {
+                entry.data.features.length > 0 && (
+                  <section class="work-features" aria-label="功能分栏">
+                    <div class="work-showcase__heading">
+                      <span>功能分栏</span>
+                    </div>
+                    <div class="work-features__grid">
+                      {entry.data.features.map((feature) => (
+                        <article>
+                          <h2>{feature.title}</h2>
+                          <p>{feature.description}</p>
+                        </article>
+                      ))}
+                    </div>
+                  </section>
+                )
+              }
+
+              {
+                entry.data.timeline.length > 0 && (
+                  <section class="work-timeline" aria-label="迭代记录">
+                    <div class="work-showcase__heading">
+                      <span>迭代记录</span>
+                    </div>
+                    <ol>
+                      {entry.data.timeline.map((item) => (
+                        <li>
+                          <time>{item.date}</time>
+                          <div>
+                            <strong>{item.title}</strong>
+                            <p>{item.description}</p>
+                          </div>
+                        </li>
+                      ))}
+                    </ol>
+                  </section>
+                )
+              }
+            </section>
+          )
+        }
+        <Content />
+      </div>
+    </article>
+  </main>
+</BaseLayout>

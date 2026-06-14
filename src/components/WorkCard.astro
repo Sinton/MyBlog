@@ -1,0 +1,90 @@
+---
+import StampTag from "./StampTag.astro";
+
+interface Props {
+  href: string;
+  title: string;
+  subtitle: string;
+  deck: string;
+  category: string;
+  year: number;
+  platform: string;
+  accent?: "red" | "blue" | "green" | "gold" | "ink";
+  variant?: "lead" | "compact";
+  image?: {
+    src: string;
+    width: number;
+    height: number;
+    alt: string;
+    title?: string;
+    caption?: string;
+  };
+}
+
+const {
+  href,
+  title,
+  subtitle,
+  deck,
+  category,
+  year,
+  platform,
+  accent = "ink",
+  variant = "compact",
+  image,
+} = Astro.props;
+
+const categoryLabels: Record<string, string> = {
+  "Investigation Desk": "调查版",
+  "Culture Desk": "文化版",
+  "Service Column": "生活服务",
+  "Night Edition": "夜间版",
+  "Field Dispatch": "外勤通讯",
+  "Economy Desk": "经济版",
+};
+
+const displayCategory = categoryLabels[category] ?? category;
+---
+
+<article
+  class:list={[
+    "work-card",
+    `work-card--${variant}`,
+    `work-card--${accent}`,
+    variant === "lead" && image && "work-card--has-image",
+  ]}
+>
+  <a href={href} class="work-card__link">
+    <div class="work-card__meta">
+      {variant !== "lead" && <StampTag label={displayCategory} tone={accent} />}
+      <span>{year}</span>
+      <span>{platform}</span>
+    </div>
+    <h2>{title}</h2>
+    <p class="work-card__subtitle">{subtitle}</p>
+    <p>{deck}</p>
+    {
+      variant === "lead" && image ? (
+        <figure class="work-card__image">
+          <img
+            src={image.src}
+            width={image.width}
+            height={image.height}
+            alt={image.alt}
+            loading="eager"
+            decoding="async"
+          />
+          <figcaption>
+            <span>头版样张</span>
+            <strong>{image.title ?? title}</strong>
+          </figcaption>
+        </figure>
+      ) : variant === "lead" ? (
+        <div class="work-card__engraving" aria-hidden="true">
+          <span>头版插图 / {title}</span>
+        </div>
+      ) : null
+    }
+    <span class="read-more">查阅档案</span>
+  </a>
+</article>

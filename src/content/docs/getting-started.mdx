@@ -1,0 +1,91 @@
+---
+title: 先把样报跑起来
+description: 安装依赖、启动开发服务器，并按顺序确认主题默认页面。
+order: 1
+category: Guide
+updated: 2026-06-14
+---
+
+这份主题不是空白脚手架，而是一份已经排好版的样报。第一次使用时，不要急着改组件，先把项目跑起来，确认默认页面都能访问，再开始替换内容。
+
+## 启动项目
+
+```bash
+pnpm install
+pnpm dev
+```
+
+开发服务器启动后，按这个顺序检查：
+
+- `/`：头版，负责展示主题主视觉、最近更新和入口。
+- `/projects/`：案例，适合放作品、产品、模板样张。
+- `/articles/`：专栏，适合放博客文章、札记、更新日志。
+- `/docs/`：说明书，适合放长期维护的使用说明。
+- `/about/`：关于，介绍这个站点或主题本身。
+
+## 第一次先改三处
+
+第一处是 `src/theme.config.ts`，改站点标题、副标题、描述、导航、社交链接、版次和时区。大部分站点身份都在这里。
+
+第二处是 `src/content`，把样稿替换成自己的内容：
+
+- `docs` 放主题说明、产品说明或长期维护的说明页。
+- `articles` 放普通文章、专栏、札记和更新日志。
+- `projects` 放作品、案例、产品介绍或模板样张。
+
+第三处是 `README.md`，把项目介绍、安装方式和发布说明换成自己的。
+
+如果只是想试排版，不需要先重构组件。报头、列表、标签、文章目次和案例档案已经能撑起一版完整主题。
+
+## 新增一篇文章
+
+在 `src/content/articles` 新建一个 `.mdx` 文件，例如 `my-first-column.mdx`：
+
+```mdx
+---
+title: 我的第一篇专栏
+description: 这段文字会出现在专栏列表和文章页顶部。
+date: 2026-06-14
+category: Notes
+tags: ["Writing", "Astro"]
+---
+
+## 小标题
+
+这里开始写正文。文章页会根据二级标题生成目次。
+```
+
+保存后打开 `/articles/`，新文章会自动进入列表。
+
+## 新增一个案例
+
+在 `src/content/projects` 新建 `.mdx` 文件，最少保留这些字段：
+
+```mdx
+---
+title: 我的项目
+subtitle: 一句话说明它是什么
+deck: 用两三句话说明它解决什么问题
+year: 2026
+order: 3
+featured: false
+---
+
+这里写项目正文。
+```
+
+案例页会读取 `order` 排序，首页会优先展示 `featured: true` 的案例。
+
+## 常用命令
+
+```bash
+pnpm check
+pnpm build
+pnpm preview
+```
+
+`pnpm check` 用来检查 Astro 与 TypeScript 类型，`pnpm build` 用来确认静态站点可以完整生成。
+
+## 什么时候再改组件
+
+等你确认内容结构以后，再改 `src/components` 和 `src/styles/global.css`。先动内容，再动版式，能避免把主题改成只适合某一篇文章的页面。

@@ -1,0 +1,252 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Masthead from "@/components/Masthead.astro";
+import StampTag from "@/components/StampTag.astro";
+import WorkCard from "@/components/WorkCard.astro";
+import { formatDate, sortByDateDesc } from "@/lib/format";
+import { themeConfig } from "@/theme.config";
+
+const docs = (await getCollection("docs")).sort((a, b) => a.data.order - b.data.order);
+const articles = sortByDateDesc(await getCollection("articles"));
+const projects = (await getCollection("projects")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+const leadProject = projects.find((project) => project.data.featured) ?? projects[0];
+const otherProjects = projects.filter((project) => project.id !== leadProject?.id);
+const selectedDocs = docs.slice(0, 3);
+const selectedArticles = articles.slice(0, 2);
+const selectedProjects = otherProjects.slice(0, 2);
+const latestUpdates = [
+  ...docs.slice(0, 2).map((entry) => ({
+    href: `/docs/${entry.id}/`,
+    kind: "说明书",
+    title: entry.data.title,
+    date: entry.data.updated ?? new Date("2026-06-14"),
+  })),
+  ...articles.slice(0, 3).map((entry) => ({
+    href: `/articles/${entry.id}/`,
+    kind: "专栏",
+    title: entry.data.title,
+    date: entry.data.date,
+  })),
+]
+  .sort((a, b) => b.date.getTime() - a.date.getTime())
+  .slice(0, 3);
+
+const formatDigestDate = (date: Date) =>
+  new Intl.DateTimeFormat(themeConfig.lang, {
+    month: "numeric",
+    day: "numeric",
+    timeZone: themeConfig.timezone,
+  }).format(date);
+---
+
+<BaseLayout title={themeConfig.siteTitle} description={themeConfig.description}>
+  <Masthead />
+
+  <main>
+    <section class="front-page">
+      <div class="front-page__lead">
+        <div class="front-page__banner">主题头版</div>
+        {
+          leadProject && (
+            <WorkCard
+              href={`/projects/${leadProject.id}/`}
+              title={leadProject.data.title}
+              subtitle={leadProject.data.subtitle}
+              deck={leadProject.data.deck}
+              category={leadProject.data.category}
+              year={leadProject.data.year}
+              platform={leadProject.data.platform}
+              accent={leadProject.data.accent}
+              variant="lead"
+            />
+          )
+        }
+      </div>
+
+      <aside class="front-page__briefs front-page__rail">
+        <StampTag label="主题概览" tone="red" />
+        <div class="briefs__header">
+          <h1>一份把报头、专栏和案例页都排好的 Astro 旧报纸主题。</h1>
+        </div>
+        <div class="briefs__index">
+          <a href="/docs/">
+            <strong>{docs.length}</strong>
+            <span>说明书</span>
+          </a>
+          <a href="/articles/">
+            <strong>{articles.length}</strong>
+            <span>示例专栏</span>
+          </a>
+          <a href="/projects/">
+            <strong>{projects.length}</strong>
+            <span>项目样张</span>
+          </a>
+        </div>
+        <div class="briefs__updates">
+          <h2>最近更新</h2>
+          <ul>
+            {
+              latestUpdates.map((entry) => (
+                <li>
+                  <a href={entry.href}>
+                    <span>
+                      {formatDigestDate(entry.date)} / {entry.kind}
+                    </span>
+                    <strong>{entry.title}</strong>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div class="briefs__note">
+          <h2>编辑说明</h2>
+          <p>
+            默认内容只保留主题说明和样张，不预设评论、后台或重型业务模块。
+          </p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="front-selection" aria-label="本期选登">
+      <div class="section-heading front-selection__heading">
+        <span class="section-kicker">本期选登</span>
+      </div>
+
+      <div class="front-selection__grid">
+        <article class="selection-column selection-column--works">
+          <div class="selection-column__header">
+            <StampTag label="说明书" tone="red" />
+            <a href="/docs/">翻阅说明书</a>
+          </div>
+          <div class="selection-work-layout">
+            <div class="selection-work-feature">
+              {
+                selectedDocs[0] && (
+                  <a href={`/docs/${selectedDocs[0].id}/`}>
+                    <span>{selectedDocs[0].data.category}</span>
+                    <h2>{selectedDocs[0].data.title}</h2>
+                    <strong>{selectedDocs[0].data.description}</strong>
+                    <p>从启动项目、修改报头，到新增文章和案例，说明书会按使用顺序逐篇展开。</p>
+                  </a>
+                )
+              }
+              <div class="selection-work-extra">
+                <section>
+                  <h3>使用路径</h3>
+                  <ul>
+                    <li>先修改 `src/theme.config.ts`。</li>
+                    <li>再把自己的文章放入 `articles` 或 `projects`。</li>
+                    <li>最后运行 `pnpm check` 和 `pnpm build`。</li>
+                  </ul>
+                </section>
+                <section>
+                  <h3>主题档案</h3>
+                  <dl>
+                    <div>
+                      <dt>框架</dt>
+                      <dd>Astro / MDX</dd>
+                    </div>
+                    <div>
+                      <dt>集合</dt>
+                      <dd>docs / articles / projects</dd>
+                    </div>
+                    <div>
+                      <dt>风格</dt>
+                      <dd>旧报纸 / 铅字 / 纸张纹理</dd>
+                    </div>
+                  </dl>
+                </section>
+              </div>
+            </div>
+            <div class="selection-work-briefs">
+              <h3>同版短讯</h3>
+              {
+                selectedDocs.slice(1).map((doc) => (
+                  <a href={`/docs/${doc.id}/`}>
+                    <span>{doc.data.category}</span>
+                    <strong>{doc.data.title}</strong>
+                    <small>{doc.data.description}</small>
+                  </a>
+                ))
+              }
+              {
+                selectedProjects.length > 0 && (
+                  <div class="selection-pending">
+                    <h4>案例索引</h4>
+                    <ul>
+                      {selectedProjects.map((project) => (
+                        <li>
+                          <a href={`/projects/${project.id}/`}>
+                            <strong>{project.data.title}</strong>
+                            <span>{project.data.subtitle}</span>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )
+              }
+            </div>
+          </div>
+        </article>
+
+        <article class="selection-column selection-column--reading">
+          <section class="selection-reading-block">
+            <div class="selection-column__header">
+              <StampTag label="专栏样张" tone="blue" />
+              <a href="/articles/">翻阅专栏</a>
+            </div>
+            <ul class="selection-list">
+              {
+                selectedArticles.map((article) => (
+                  <li>
+                    <a href={`/articles/${article.id}/`}>
+                      <span>{formatDate(article.data.date)} / {article.data.category}</span>
+                      <strong>{article.data.title}</strong>
+                      <p>{article.data.description}</p>
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+
+          <section class="selection-reading-block selection-reading-block--quick">
+            <div class="selection-column__header">
+              <StampTag label="上手指南" tone="green" />
+              <a href="/docs/getting-started/">开始使用</a>
+            </div>
+            <ul class="selection-list selection-list--compact">
+              <li>
+                <a href="/docs/getting-started/">
+                  <span>启动</span>
+                  <strong>先把样报跑起来</strong>
+                  <p>安装依赖、启动开发服务器，并按顺序检查默认页面。</p>
+                </a>
+              </li>
+              <li>
+                <a href="/docs/configuration/">
+                  <span>配置</span>
+                  <strong>改报头、导航和社交链接</strong>
+                  <p>站点身份、导航和社交链接都集中在主题配置文件里。</p>
+                </a>
+              </li>
+              <li>
+                <a href="/docs/content-schema/">
+                  <span>内容</span>
+                  <strong>理解 docs / articles / projects</strong>
+                  <p>用三类集合覆盖说明、文章和案例。</p>
+                </a>
+              </li>
+            </ul>
+          </section>
+        </article>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

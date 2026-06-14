@@ -1,0 +1,41 @@
+---
+import "../styles/global.css";
+import "lenis/dist/lenis.css";
+import BackToTop from "@/components/BackToTop.astro";
+import { themeConfig } from "@/theme.config";
+import mastheadFontWoBaoUrl from "@fontsource/zhi-mang-xing/files/zhi-mang-xing-118-400-normal.woff2?url";
+import mastheadFontDeUrl from "@fontsource/zhi-mang-xing/files/zhi-mang-xing-119-400-normal.woff2?url";
+import mastheadFontWanUrl from "@fontsource/zhi-mang-xing/files/zhi-mang-xing-114-400-normal.woff2?url";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = themeConfig.siteTitle,
+  description = themeConfig.description,
+} = Astro.props;
+
+const pageTitle =
+  title === themeConfig.siteTitle ? title : `${title} | ${themeConfig.siteTitle}`;
+---
+
+<!doctype html>
+<html lang={themeConfig.lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="preload" href={mastheadFontWoBaoUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={mastheadFontDeUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={mastheadFontWanUrl} as="font" type="font/woff2" crossorigin />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <div class="paper-shell">
+      <slot />
+    </div>
+    <BackToTop />
+  </body>
+</html>
