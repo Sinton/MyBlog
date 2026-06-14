@@ -1,14 +1,35 @@
-import { defaultThemeConfig, type NewspaperThemeConfig } from "./lib/theme-config";
+export type ThemeNavItem = {
+  label: string;
+  href: string;
+};
 
-export const themeConfig: NewspaperThemeConfig = {
-  ...defaultThemeConfig,
+export type ThemeSocialLink = {
+  label: string;
+  href: string;
+};
+
+export type NewspaperThemeConfig = {
+  siteTitle: string;
+  siteSubtitle: string;
+  description: string;
+  lang: string;
+  issue: string;
+  since: string;
+  location: string;
+  frequency: string;
+  timezone: string;
+  navItems: ThemeNavItem[];
+  socialLinks: ThemeSocialLink[];
+};
+
+export const defaultThemeConfig: NewspaperThemeConfig = {
   siteTitle: "我的晚报",
   siteSubtitle: "Astro 旧报纸主题",
   description: "一个旧报纸风格的 Astro 博客与文档主题。",
   lang: "zh-CN",
   issue: "第一卷 第一号",
   since: "2026",
-  location: "Github Repo",
+  location: "GitHub Repo",
   frequency: "周刊",
   timezone: "Asia/Shanghai",
   navItems: [

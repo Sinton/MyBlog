@@ -1,16 +1,17 @@
----
+﻿---
 import { getCollection } from "astro:content";
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import Masthead from "@/components/Masthead.astro";
-import WorkCard from "@/components/WorkCard.astro";
+import BaseLayout from "astro-newspaper-theme/layouts/BaseLayout.astro";
+import Masthead from "astro-newspaper-theme/components/Masthead.astro";
+import WorkCard from "astro-newspaper-theme/components/WorkCard.astro";
+import { themeConfig } from "@/theme.config";
 
 const projects = (await getCollection("projects")).sort(
   (a, b) => a.data.order - b.data.order,
 );
 ---
 
-<BaseLayout title="案例" description="旧报纸主题的项目样张与版面能力">
-  <Masthead />
+<BaseLayout title="案例" description="旧报纸主题的项目样张与版面能力" config={themeConfig}>
+  <Masthead config={themeConfig} />
   <main class="archive-page">
     <header class="archive-header">
       <h1 class="section-kicker archive-header__kicker-title">案例</h1>

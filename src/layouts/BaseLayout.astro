@@ -1,8 +1,11 @@
 ---
 import "../styles/global.css";
 import "lenis/dist/lenis.css";
-import BackToTop from "@/components/BackToTop.astro";
-import { themeConfig } from "@/theme.config";
+import BackToTop from "../components/BackToTop.astro";
+import {
+  defaultThemeConfig,
+  type NewspaperThemeConfig,
+} from "../lib/theme-config";
 import mastheadFontWoBaoUrl from "@fontsource/zhi-mang-xing/files/zhi-mang-xing-118-400-normal.woff2?url";
 import mastheadFontDeUrl from "@fontsource/zhi-mang-xing/files/zhi-mang-xing-119-400-normal.woff2?url";
 import mastheadFontWanUrl from "@fontsource/zhi-mang-xing/files/zhi-mang-xing-114-400-normal.woff2?url";
@@ -10,19 +13,18 @@ import mastheadFontWanUrl from "@fontsource/zhi-mang-xing/files/zhi-mang-xing-11
 interface Props {
   title?: string;
   description?: string;
+  config?: NewspaperThemeConfig;
 }
 
-const {
-  title = themeConfig.siteTitle,
-  description = themeConfig.description,
-} = Astro.props;
-
+const { config = defaultThemeConfig } = Astro.props;
+const title = Astro.props.title ?? config.siteTitle;
+const description = Astro.props.description ?? config.description;
 const pageTitle =
-  title === themeConfig.siteTitle ? title : `${title} | ${themeConfig.siteTitle}`;
+  title === config.siteTitle ? title : `${title} | ${config.siteTitle}`;
 ---
 
 <!doctype html>
-<html lang={themeConfig.lang}>
+<html lang={config.lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

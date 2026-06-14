@@ -1,10 +1,10 @@
----
+﻿---
 import { getCollection } from "astro:content";
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import Masthead from "@/components/Masthead.astro";
-import StampTag from "@/components/StampTag.astro";
-import WorkCard from "@/components/WorkCard.astro";
-import { formatDate, sortByDateDesc } from "@/lib/format";
+import BaseLayout from "astro-newspaper-theme/layouts/BaseLayout.astro";
+import Masthead from "astro-newspaper-theme/components/Masthead.astro";
+import StampTag from "astro-newspaper-theme/components/StampTag.astro";
+import WorkCard from "astro-newspaper-theme/components/WorkCard.astro";
+import { formatDate, sortByDateDesc } from "astro-newspaper-theme/lib/format";
 import { themeConfig } from "@/theme.config";
 
 const docs = (await getCollection("docs")).sort((a, b) => a.data.order - b.data.order);
@@ -43,8 +43,8 @@ const formatDigestDate = (date: Date) =>
   }).format(date);
 ---
 
-<BaseLayout title={themeConfig.siteTitle} description={themeConfig.description}>
-  <Masthead />
+<BaseLayout title={themeConfig.siteTitle} description={themeConfig.description} config={themeConfig}>
+  <Masthead config={themeConfig} />
 
   <main>
     <section class="front-page">
@@ -206,7 +206,7 @@ const formatDigestDate = (date: Date) =>
                 selectedArticles.map((article) => (
                   <li>
                     <a href={`/articles/${article.id}/`}>
-                      <span>{formatDate(article.data.date)} / {article.data.category}</span>
+                      <span>{formatDate(article.data.date, themeConfig)} / {article.data.category}</span>
                       <strong>{article.data.title}</strong>
                       <p>{article.data.description}</p>
                     </a>

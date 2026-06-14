@@ -1,11 +1,14 @@
-import { themeConfig } from "@/theme.config";
+import { defaultThemeConfig, type NewspaperThemeConfig } from "./theme-config";
 
-export function formatDate(date: Date) {
-  return new Intl.DateTimeFormat(themeConfig.lang, {
+export function formatDate(
+  date: Date,
+  config: Pick<NewspaperThemeConfig, "lang" | "timezone"> = defaultThemeConfig,
+) {
+  return new Intl.DateTimeFormat(config.lang, {
     year: "numeric",
     month: "long",
     day: "numeric",
-    timeZone: themeConfig.timezone,
+    timeZone: config.timezone,
   }).format(date);
 }
 

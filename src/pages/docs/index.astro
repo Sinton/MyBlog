@@ -1,8 +1,9 @@
----
+﻿---
 import { getCollection } from "astro:content";
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import EntryList from "@/components/EntryList.astro";
-import Masthead from "@/components/Masthead.astro";
+import BaseLayout from "astro-newspaper-theme/layouts/BaseLayout.astro";
+import EntryList from "astro-newspaper-theme/components/EntryList.astro";
+import Masthead from "astro-newspaper-theme/components/Masthead.astro";
+import { themeConfig } from "@/theme.config";
 
 const docs = (await getCollection("docs")).sort((a, b) => a.data.order - b.data.order);
 const entries = docs.map((doc) => ({
@@ -16,8 +17,8 @@ const entries = docs.map((doc) => ({
 }));
 ---
 
-<BaseLayout title="说明书" description="旧报纸 Astro 主题的上手、配置和迁移说明">
-  <Masthead />
+<BaseLayout title="说明书" description="旧报纸 Astro 主题的上手、配置和迁移说明" config={themeConfig}>
+  <Masthead config={themeConfig} />
   <main class="archive-page">
     <header class="archive-header">
       <h1 class="section-kicker archive-header__kicker-title">说明书</h1>
@@ -25,6 +26,6 @@ const entries = docs.map((doc) => ({
         从跑起样报、改报头、写文章，到整理内容集合，这里按真实使用顺序说明这套主题怎么落到自己的站点里。
       </p>
     </header>
-    <EntryList entries={entries} basePath="/docs" label="全部说明" />
+    <EntryList entries={entries} basePath="/docs" label="全部说明" config={themeConfig} />
   </main>
 </BaseLayout>

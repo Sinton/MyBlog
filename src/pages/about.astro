@@ -1,7 +1,7 @@
----
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import Masthead from "@/components/Masthead.astro";
-import StampTag from "@/components/StampTag.astro";
+﻿---
+import BaseLayout from "astro-newspaper-theme/layouts/BaseLayout.astro";
+import Masthead from "astro-newspaper-theme/components/Masthead.astro";
+import StampTag from "astro-newspaper-theme/components/StampTag.astro";
 import { themeConfig } from "@/theme.config";
 
 const githubLink = themeConfig.socialLinks.find(
@@ -12,8 +12,9 @@ const githubLink = themeConfig.socialLinks.find(
 <BaseLayout
   title="关于"
   description={`${themeConfig.siteTitle} 是我从个人博客里抽出来的一套 Astro 旧报纸主题。`}
+  config={themeConfig}
 >
-  <Masthead />
+  <Masthead config={themeConfig} />
   <main class="detail-page about-page">
     <header class="archive-header">
       <h1 class="section-kicker archive-header__kicker-title">关于</h1>

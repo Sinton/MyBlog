@@ -1,5 +1,6 @@
 ---
-import { formatDate } from "@/lib/format";
+import { formatDate } from "../lib/format";
+import type { NewspaperThemeConfig } from "../lib/theme-config";
 
 interface EntryItem {
   id: string;
@@ -17,9 +18,10 @@ interface Props {
   entries: EntryItem[];
   basePath: string;
   label: string;
+  config?: NewspaperThemeConfig;
 }
 
-const { entries, basePath, label } = Astro.props;
+const { entries, basePath, label, config } = Astro.props;
 
 const categoryLabels: Record<string, string> = {
   Editorial: "编者按",
@@ -39,7 +41,7 @@ const displayMeta = (entry: EntryItem) => {
     entries.map((entry) => (
       <article class="entry-list__item">
         <a href={`${basePath}/${entry.id}/`}>
-          <span class="entry-list__date">{formatDate(entry.data.date)}</span>
+          <span class="entry-list__date">{formatDate(entry.data.date, config)}</span>
           <h3>{entry.data.title}</h3>
           <p>{entry.data.description}</p>
           <span class="entry-list__meta">

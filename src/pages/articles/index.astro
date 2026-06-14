@@ -1,8 +1,9 @@
----
+﻿---
 import { getCollection } from "astro:content";
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import Masthead from "@/components/Masthead.astro";
-import { formatDate, sortByDateDesc } from "@/lib/format";
+import BaseLayout from "astro-newspaper-theme/layouts/BaseLayout.astro";
+import Masthead from "astro-newspaper-theme/components/Masthead.astro";
+import { formatDate, sortByDateDesc } from "astro-newspaper-theme/lib/format";
+import { themeConfig } from "@/theme.config";
 
 const articles = sortByDateDesc(await getCollection("articles"));
 const primaryTags = Array.from(
@@ -14,8 +15,8 @@ const primaryTags = Array.from(
 }));
 ---
 
-<BaseLayout title="专栏" description="旧报纸主题的写作样稿与排版说明">
-  <Masthead />
+<BaseLayout title="专栏" description="旧报纸主题的写作样稿与排版说明" config={themeConfig}>
+  <Masthead config={themeConfig} />
   <main class="archive-page">
     <header class="archive-header">
       <h1 class="section-kicker archive-header__kicker-title">专栏</h1>
@@ -66,7 +67,7 @@ const primaryTags = Array.from(
               data-tags={JSON.stringify(article.data.tags)}
             >
               <a href={`/articles/${article.id}/`}>
-                <span class="entry-list__date">{formatDate(article.data.date)}</span>
+                <span class="entry-list__date">{formatDate(article.data.date, themeConfig)}</span>
                 <h3>{article.data.title}</h3>
                 <p>{article.data.description}</p>
                 <span class="entry-list__meta">{article.data.category}</span>

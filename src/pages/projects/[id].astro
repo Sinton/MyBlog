@@ -1,8 +1,9 @@
 ---
 import { getCollection, render } from "astro:content";
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import Masthead from "@/components/Masthead.astro";
-import StampTag from "@/components/StampTag.astro";
+import BaseLayout from "astro-newspaper-theme/layouts/BaseLayout.astro";
+import Masthead from "astro-newspaper-theme/components/Masthead.astro";
+import StampTag from "astro-newspaper-theme/components/StampTag.astro";
+import { themeConfig } from "@/theme.config";
 
 export async function getStaticPaths() {
   const projects = await getCollection("projects");
@@ -42,8 +43,8 @@ const hasShowcase =
   entry.data.timeline.length > 0;
 ---
 
-<BaseLayout title={entry.data.title} description={entry.data.deck || entry.data.description}>
-  <Masthead />
+<BaseLayout title={entry.data.title} description={entry.data.deck || entry.data.description} config={themeConfig}>
+  <Masthead config={themeConfig} />
   <main class="detail-page">
     <article class={`report report--${entry.data.accent}`}>
       <header class="report__header">

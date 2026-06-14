@@ -1,30 +1,39 @@
 ---
-import { themeConfig } from "@/theme.config";
+import {
+  defaultThemeConfig,
+  type NewspaperThemeConfig,
+} from "../lib/theme-config";
 
-const issueDate = new Intl.DateTimeFormat(themeConfig.lang, {
+interface Props {
+  config?: NewspaperThemeConfig;
+}
+
+const { config = defaultThemeConfig } = Astro.props;
+
+const issueDate = new Intl.DateTimeFormat(config.lang, {
   year: "numeric",
   month: "long",
   day: "numeric",
-  timeZone: themeConfig.timezone,
+  timeZone: config.timezone,
 }).format(new Date());
 
-const issueWeekday = new Intl.DateTimeFormat(themeConfig.lang, {
+const issueWeekday = new Intl.DateTimeFormat(config.lang, {
   weekday: "long",
-  timeZone: themeConfig.timezone,
+  timeZone: config.timezone,
 }).format(new Date());
 
 const githubLink =
-  themeConfig.socialLinks.find((link) => link.label.toLowerCase() === "github") ??
-  themeConfig.socialLinks[0];
+  config.socialLinks.find((link) => link.label.toLowerCase() === "github") ??
+  config.socialLinks[0];
 const xLink =
-  themeConfig.socialLinks.find((link) => ["x", "twitter"].includes(link.label.toLowerCase())) ??
-  themeConfig.socialLinks[1];
+  config.socialLinks.find((link) => ["x", "twitter"].includes(link.label.toLowerCase())) ??
+  config.socialLinks[1];
 ---
 
 <header class="masthead">
   <div class="masthead__topline">
-    <span>{themeConfig.issue}</span>
-    <span>{themeConfig.siteSubtitle}</span>
+    <span>{config.issue}</span>
+    <span>{config.siteSubtitle}</span>
     <div class="masthead__social" aria-label="社交链接">
       {
         githubLink && (
@@ -53,10 +62,10 @@ const xLink =
   <div class="masthead__nameplate">
     <div class="masthead__sidebox">
       <span>创刊</span>
-      <strong>{themeConfig.since}</strong>
-      <span>{themeConfig.location}</span>
+      <strong>{config.since}</strong>
+      <span>{config.location}</span>
     </div>
-    <a class="masthead__title" href="/" aria-label={`${themeConfig.siteTitle}首页`}>
+    <a class="masthead__title" href="/" aria-label={`${config.siteTitle}首页`}>
       <span class="masthead__glyph masthead__glyph--wo">我</span>
       <span class="masthead__glyph masthead__glyph--de">的</span>
       <span class="masthead__glyph masthead__glyph--wan">晚</span>
@@ -64,7 +73,7 @@ const xLink =
     </a>
     <div class="masthead__sidebox">
       <span>版次</span>
-      <strong>{themeConfig.frequency}</strong>
+      <strong>{config.frequency}</strong>
       <span class="masthead__date">
         <span>{issueDate}</span>
         <span>{issueWeekday}</span>
@@ -73,7 +82,7 @@ const xLink =
   </div>
   <nav class="masthead__nav" aria-label="Primary navigation">
     {
-      themeConfig.navItems.map(({ label, href }) => (
+      config.navItems.map(({ label, href }) => (
         <a href={href} class="masthead__nav-item">
           <strong>{label}</strong>
         </a>

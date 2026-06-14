@@ -1,9 +1,21 @@
 {
   "name": "astro-newspaper-theme",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
   "packageManager": "pnpm@10.0.0",
+  "exports": {
+    "./components/*": "./src/components/*",
+    "./layouts/*": "./src/layouts/*",
+    "./styles/*": "./src/styles/*",
+    "./lib/*": "./src/lib/*.ts"
+  },
+  "files": [
+    "src/components",
+    "src/layouts",
+    "src/styles",
+    "src/lib",
+    "README.md"
+  ],
   "scripts": {
     "dev": "astro dev --host 127.0.0.1",
     "build": "astro build",
