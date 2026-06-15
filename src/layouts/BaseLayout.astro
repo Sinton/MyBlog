@@ -9,6 +9,7 @@ import {
 import mastheadFontWoBaoUrl from "@fontsource/zhi-mang-xing/files/zhi-mang-xing-118-400-normal.woff2?url";
 import mastheadFontDeUrl from "@fontsource/zhi-mang-xing/files/zhi-mang-xing-119-400-normal.woff2?url";
 import mastheadFontWanUrl from "@fontsource/zhi-mang-xing/files/zhi-mang-xing-114-400-normal.woff2?url";
+import jetbrainsMonoUrl from "@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2?url";
 
 interface Props {
   title?: string;
@@ -21,6 +22,43 @@ const title = Astro.props.title ?? config.siteTitle;
 const description = Astro.props.description ?? config.description;
 const pageTitle =
   title === config.siteTitle ? title : `${title} | ${config.siteTitle}`;
+
+const fontFaceCss = `
+@font-face {
+  font-family: "Newspaper Masthead Calligraphy";
+  font-style: normal;
+  font-display: block;
+  font-weight: 400;
+  src: url("${mastheadFontWoBaoUrl}") format("woff2");
+  unicode-range: U+6211, U+62A5;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("${jetbrainsMonoUrl}") format("woff2");
+}
+
+@font-face {
+  font-family: "Newspaper Masthead Calligraphy";
+  font-style: normal;
+  font-display: block;
+  font-weight: 400;
+  src: url("${mastheadFontDeUrl}") format("woff2");
+  unicode-range: U+7684;
+}
+
+@font-face {
+  font-family: "Newspaper Masthead Calligraphy";
+  font-style: normal;
+  font-display: block;
+  font-weight: 400;
+  src: url("${mastheadFontWanUrl}") format("woff2");
+  unicode-range: U+665A;
+}
+`;
 ---
 
 <!doctype html>
@@ -32,6 +70,8 @@ const pageTitle =
     <link rel="preload" href={mastheadFontWoBaoUrl} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={mastheadFontDeUrl} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={mastheadFontWanUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={jetbrainsMonoUrl} as="font" type="font/woff2" crossorigin />
+    <style is:inline set:html={fontFaceCss}></style>
     <title>{pageTitle}</title>
   </head>
   <body>
