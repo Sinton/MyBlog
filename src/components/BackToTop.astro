@@ -11,12 +11,9 @@
 </button>
 
 <script>
-  import Lenis from "lenis";
-
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const backToTop = document.querySelector<HTMLButtonElement>("[data-back-to-top]");
   const backToTopThreshold = 520;
-  let lenis: InstanceType<typeof Lenis> | undefined;
 
   const updateBackToTop = () => {
     if (!backToTop) {
@@ -32,11 +29,8 @@
   backToTop?.addEventListener("click", () => {
     backToTop.blur();
 
-    if (lenis) {
-      lenis.scrollTo(0, {
-        duration: 0.85,
-        force: true,
-      });
+    if (window.__newspaperSmoothScroll) {
+      window.__newspaperSmoothScroll.scrollToTop();
       return;
     }
 
@@ -48,61 +42,4 @@
 
   window.addEventListener("scroll", updateBackToTop, { passive: true });
   updateBackToTop();
-
-  if (!prefersReducedMotion) {
-    lenis = new Lenis({
-      autoRaf: true,
-      anchors: false,
-      lerp: 0.18,
-      wheelMultiplier: 1.05,
-      touchMultiplier: 1,
-      smoothWheel: true,
-      syncTouch: false,
-      prevent: (node) =>
-        node instanceof Element && Boolean(node.closest("[data-horizontal-scroll]")),
-    });
-    const activeLenis = lenis;
-
-    document.addEventListener("click", (event) => {
-      const link =
-        event.target instanceof Element
-          ? event.target.closest<HTMLAnchorElement>("a[href]")
-          : null;
-
-      if (!link) {
-        return;
-      }
-
-      const targetUrl = new URL(link.href);
-      const currentUrl = new URL(window.location.href);
-
-      if (
-        targetUrl.origin !== currentUrl.origin ||
-        targetUrl.pathname !== currentUrl.pathname ||
-        !targetUrl.hash
-      ) {
-        return;
-      }
-
-      const rawId = targetUrl.hash.slice(1);
-      const decodedId = decodeURIComponent(rawId);
-      const target = document.getElementById(decodedId) ?? document.getElementById(rawId);
-
-      if (!target) {
-        return;
-      }
-
-      event.preventDefault();
-      activeLenis.scrollTo(target, {
-        offset: -34,
-        duration: 0.85,
-        force: true,
-        onComplete: () => {
-          window.history.pushState(null, "", targetUrl.hash);
-        },
-      });
-    });
-
-    window.addEventListener("resize", () => activeLenis.resize());
-  }
 </script>

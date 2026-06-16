@@ -1,0 +1,115 @@
+<script>
+  import Lenis from "lenis";
+
+  type ScrollTargetOptions = {
+    offset?: number;
+    duration?: number;
+    onComplete?: () => void;
+  };
+
+  declare global {
+    interface Window {
+      __newspaperSmoothScroll?: {
+        scrollToTop: () => void;
+        scrollToTarget: (target: HTMLElement | number, options?: ScrollTargetOptions) => void;
+      };
+    }
+  }
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const nativeScrollTo = (target: HTMLElement | number) => {
+    if (typeof target === "number") {
+      window.scrollTo({
+        top: target,
+        behavior: prefersReducedMotion ? "auto" : "smooth",
+      });
+      return;
+    }
+
+    target.scrollIntoView({
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+      block: "start",
+    });
+  };
+
+  if (prefersReducedMotion) {
+    window.__newspaperSmoothScroll = {
+      scrollToTop: () => nativeScrollTo(0),
+      scrollToTarget: (target, options) => {
+        nativeScrollTo(target);
+        options?.onComplete?.();
+      },
+    };
+  } else {
+    const lenis = new Lenis({
+      autoRaf: true,
+      anchors: false,
+      lerp: 0.18,
+      wheelMultiplier: 1.05,
+      touchMultiplier: 1,
+      smoothWheel: true,
+      syncTouch: false,
+      prevent: (node) =>
+        node instanceof Element && Boolean(node.closest("[data-horizontal-scroll]")),
+    });
+
+    window.__newspaperSmoothScroll = {
+      scrollToTop: () => {
+        lenis.scrollTo(0, {
+          duration: 0.85,
+          force: true,
+        });
+      },
+      scrollToTarget: (target, options) => {
+        lenis.scrollTo(target, {
+          offset: options?.offset ?? 0,
+          duration: options?.duration ?? 0.85,
+          force: true,
+          onComplete: options?.onComplete,
+        });
+      },
+    };
+
+    document.addEventListener("click", (event) => {
+      const link =
+        event.target instanceof Element
+          ? event.target.closest<HTMLAnchorElement>("a[href]")
+          : null;
+
+      if (!link) {
+        return;
+      }
+
+      const targetUrl = new URL(link.href);
+      const currentUrl = new URL(window.location.href);
+
+      if (
+        targetUrl.origin !== currentUrl.origin ||
+        targetUrl.pathname !== currentUrl.pathname ||
+        !targetUrl.hash
+      ) {
+        return;
+      }
+
+      const rawId = targetUrl.hash.slice(1);
+      const decodedId = decodeURIComponent(rawId);
+      const target = document.getElementById(decodedId) ?? document.getElementById(rawId);
+
+      if (!target) {
+        return;
+      }
+
+      event.preventDefault();
+      window.__newspaperSmoothScroll?.scrollToTarget(target, {
+        offset: -34,
+        duration: 0.85,
+        onComplete: () => {
+          window.history.pushState(null, "", targetUrl.hash);
+        },
+      });
+    });
+
+    window.addEventListener("resize", () => lenis.resize());
+  }
+</script>

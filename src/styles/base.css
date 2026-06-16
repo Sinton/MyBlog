@@ -1,0 +1,64 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 20% 10%, rgba(158, 47, 36, 0.1), transparent 24rem),
+    linear-gradient(90deg, rgba(31, 26, 20, 0.025) 1px, transparent 1px),
+    var(--paper-deep);
+  background-size: auto, 7px 7px, auto;
+  font-family: var(--serif);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    repeating-linear-gradient(0deg, rgba(23, 19, 15, 0.028) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(90deg, rgba(23, 19, 15, 0.018) 0 1px, transparent 1px 9px);
+  content: "";
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+p {
+  line-height: 1.75;
+}
+
+.paper-shell {
+  width: min(1240px, calc(100% - 32px));
+  min-height: calc(100vh - 32px);
+  margin: 16px auto;
+  padding: clamp(18px, 3vw, 38px);
+  background:
+    radial-gradient(circle at 80% 18%, rgba(23, 19, 15, 0.08), transparent 18rem),
+    repeating-linear-gradient(90deg, rgba(23, 19, 15, 0.035) 0 1px, transparent 1px 18px),
+    linear-gradient(rgba(31, 26, 20, 0.035), rgba(31, 26, 20, 0.035)),
+    var(--paper-light);
+  border: 2px solid var(--line-strong);
+  box-shadow:
+    0 0 0 8px rgba(248, 239, 220, 0.55),
+    0 24px 80px var(--shadow);
+}

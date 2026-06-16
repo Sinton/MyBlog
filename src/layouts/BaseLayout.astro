@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import "lenis/dist/lenis.css";
 import BackToTop from "../components/BackToTop.astro";
+import SmoothScroll from "../components/SmoothScroll.astro";
 import {
   defaultThemeConfig,
   type NewspaperThemeConfig,
@@ -78,6 +79,7 @@ const fontFaceCss = `
     <div class="paper-shell">
       <slot />
     </div>
+    <SmoothScroll />
     <BackToTop />
   </body>
 </html>

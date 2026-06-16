@@ -1,0 +1,19 @@
+:root {
+  --paper: #efe2c2;
+  --paper-light: #f8efdc;
+  --paper-deep: #d7c39d;
+  --ink: #17130f;
+  --ink-soft: #4e4437;
+  --line: #9b886a;
+  --line-strong: #4c4031;
+  --stamp-red: #9e2f24;
+  --dispatch-blue: #2f536b;
+  --field-green: #586f4d;
+  --gold: #a57e2c;
+  --shadow: rgba(61, 45, 24, 0.14);
+  --serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", serif;
+  --masthead-font: "Newspaper Masthead Calligraphy", "Zhi Mang Xing", "Kaiti SC", "STKaiti", "KaiTi", "Songti SC", serif;
+  --headline: "Songti SC", "STSong", "Noto Serif SC", "SimSun", serif;
+  --kai: "Kaiti SC", "STKaiti", "KaiTi", serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Monaco, "Cascadia Code", "Cascadia Mono", "LXGW WenKai Mono", Consolas, "Courier New", monospace;
+}

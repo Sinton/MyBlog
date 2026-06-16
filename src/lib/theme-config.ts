@@ -27,7 +27,7 @@ export const defaultThemeConfig: NewspaperThemeConfig = {
   siteSubtitle: "Astro 旧报纸主题",
   description: "一个旧报纸风格的 Astro 博客与文档主题。",
   lang: "zh-CN",
-  issue: "第一卷 第一号",
+  issue: "第一版 第一号",
   since: "2026",
   location: "GitHub Repo",
   frequency: "周刊",
