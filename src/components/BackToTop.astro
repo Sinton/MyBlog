@@ -1,13 +1,21 @@
+---
+interface Props {
+  label?: string;
+}
+
+const { label = "回到刊首" } = Astro.props;
+---
+
 <button
   class="back-to-top"
   type="button"
   data-back-to-top
-  aria-label="回到刊首"
+  aria-label={label}
   aria-hidden="true"
   tabindex="-1"
 >
   <span aria-hidden="true">↑</span>
-  <strong>回到刊首</strong>
+  <strong>{label}</strong>
 </button>
 
 <script>

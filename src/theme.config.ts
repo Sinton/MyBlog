@@ -8,9 +8,11 @@ export const themeConfig: NewspaperThemeConfig = {
   lang: "zh-CN",
   issue: "第一版 第一号",
   since: "2026",
-  location: "Github Repo",
+  location: "GitHub Repo",
   frequency: "周刊",
   timezone: "Asia/Shanghai",
+  backToTopLabel: "回到刊首",
+  enableSmoothScroll: true,
   navItems: [
     { label: "头版", href: "/" },
     { label: "案例", href: "/projects/" },

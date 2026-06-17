@@ -3,9 +3,10 @@ import { getCollection } from "astro:content";
 import BaseLayout from "astro-newspaper-theme/layouts/BaseLayout.astro";
 import EntryList from "astro-newspaper-theme/components/EntryList.astro";
 import Masthead from "astro-newspaper-theme/components/Masthead.astro";
+import { sortByOrder } from "astro-newspaper-theme/lib/format";
 import { themeConfig } from "@/theme.config";
 
-const docs = (await getCollection("docs")).sort((a, b) => a.data.order - b.data.order);
+const docs = sortByOrder(await getCollection("docs"));
 const entries = docs.map((doc) => ({
   id: doc.id,
   data: {

@@ -3,11 +3,10 @@ import { getCollection } from "astro:content";
 import BaseLayout from "astro-newspaper-theme/layouts/BaseLayout.astro";
 import Masthead from "astro-newspaper-theme/components/Masthead.astro";
 import WorkCard from "astro-newspaper-theme/components/WorkCard.astro";
+import { sortByOrder } from "astro-newspaper-theme/lib/format";
 import { themeConfig } from "@/theme.config";
 
-const projects = (await getCollection("projects")).sort(
-  (a, b) => a.data.order - b.data.order,
-);
+const projects = sortByOrder(await getCollection("projects"));
 ---
 
 <BaseLayout title="案例" description="旧报纸主题的项目样张与版面能力" config={themeConfig}>

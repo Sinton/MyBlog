@@ -22,6 +22,8 @@ export const themeConfig = {
   since: "2026",
   location: "Theme Desk",
   frequency: "周刊",
+  backToTopLabel: "回到刊首",
+  enableSmoothScroll: true,
 };
 ```
 
@@ -65,3 +67,25 @@ navItems: [
 ## 页面描述
 
 `description` 会进入默认 meta description，也会被首页等页面作为站点介绍使用。把它写成一句能说明站点定位的话，不要只写“个人博客”。
+
+## 滚动交互
+
+`enableSmoothScroll` 控制是否启用主题内置的平滑滚动。默认值是 `true`，会挂载 `SmoothScroll`，文章锚点、目次跳转和回到顶部都会走同一套滚动逻辑。
+
+如果你更喜欢浏览器原生滚动，或者站点里已经接入了自己的滚动方案，可以把它关掉：
+
+```ts
+export const themeConfig = {
+  enableSmoothScroll: false,
+};
+```
+
+关闭以后，`BackToTop` 仍然保留，会使用浏览器原生的 `window.scrollTo` 回到顶部。
+
+`backToTopLabel` 控制右下角回顶按钮的文案。默认是：
+
+```ts
+export const themeConfig = {
+  backToTopLabel: "回到刊首",
+};
+```

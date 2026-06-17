@@ -18,6 +18,8 @@ export type NewspaperThemeConfig = {
   location: string;
   frequency: string;
   timezone: string;
+  backToTopLabel: string;
+  enableSmoothScroll: boolean;
   navItems: ThemeNavItem[];
   socialLinks: ThemeSocialLink[];
 };
@@ -32,6 +34,8 @@ export const defaultThemeConfig: NewspaperThemeConfig = {
   location: "GitHub Repo",
   frequency: "周刊",
   timezone: "Asia/Shanghai",
+  backToTopLabel: "回到刊首",
+  enableSmoothScroll: true,
   navItems: [
     { label: "头版", href: "/" },
     { label: "案例", href: "/projects/" },

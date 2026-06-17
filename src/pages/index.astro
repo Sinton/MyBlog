@@ -4,28 +4,32 @@ import BaseLayout from "astro-newspaper-theme/layouts/BaseLayout.astro";
 import Masthead from "astro-newspaper-theme/components/Masthead.astro";
 import StampTag from "astro-newspaper-theme/components/StampTag.astro";
 import WorkCard from "astro-newspaper-theme/components/WorkCard.astro";
-import { formatDate, sortByDateDesc } from "astro-newspaper-theme/lib/format";
+import {
+  formatDate,
+  pickFeatured,
+  sortByDateDesc,
+  sortByOrder,
+  takeLatest,
+} from "astro-newspaper-theme/lib/format";
 import { themeConfig } from "@/theme.config";
 
-const docs = (await getCollection("docs")).sort((a, b) => a.data.order - b.data.order);
+const docs = sortByOrder(await getCollection("docs"));
 const articles = sortByDateDesc(await getCollection("articles"));
-const projects = (await getCollection("projects")).sort(
-  (a, b) => a.data.order - b.data.order,
-);
+const projects = sortByOrder(await getCollection("projects"));
 
-const leadProject = projects.find((project) => project.data.featured) ?? projects[0];
+const leadProject = pickFeatured(projects) ?? projects[0];
 const otherProjects = projects.filter((project) => project.id !== leadProject?.id);
-const selectedDocs = docs.slice(0, 3);
-const selectedArticles = articles.slice(0, 2);
-const selectedProjects = otherProjects.slice(0, 2);
+const selectedDocs = takeLatest(docs, 3);
+const selectedArticles = takeLatest(articles, 2);
+const selectedProjects = takeLatest(otherProjects, 2);
 const latestUpdates = [
-  ...docs.slice(0, 2).map((entry) => ({
+  ...takeLatest(docs, 2).map((entry) => ({
     href: `/docs/${entry.id}/`,
     kind: "说明书",
     title: entry.data.title,
     date: entry.data.updated ?? new Date("2026-06-14"),
   })),
-  ...articles.slice(0, 3).map((entry) => ({
+  ...takeLatest(articles, 3).map((entry) => ({
     href: `/articles/${entry.id}/`,
     kind: "专栏",
     title: entry.data.title,

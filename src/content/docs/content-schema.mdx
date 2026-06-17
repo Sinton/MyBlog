@@ -1,16 +1,18 @@
 ---
-title: 三类稿件怎么放
-description: 用 docs、articles、projects 把说明、专栏和案例分开，站点才像一份有栏目表的报纸。
+title: 内容集合怎么放
+description: 示例站默认用 docs、articles、projects 分开说明、专栏和案例，你也可以换成自己的 collection。
 order: 3
 category: Reference
 updated: 2026-06-14
 ---
 
-主题只保留三类内容集合：说明书、专栏、案例。集合定义在 `src/content.config.ts`，页面会直接读取这些字段生成头版摘要、归档列表和详情页。
+这份样报默认提供三类内容集合：说明书、专栏、案例。它们定义在 `src/content.config.ts`，示例页面会读取这些字段生成头版摘要、归档列表和详情页。
+
+但 `docs`、`articles`、`projects` 只是示例站的默认命名，不是主题核心的硬约束。主题组件关心的是你传入的数据形状和页面结构；你完全可以把集合改成 `posts`、`works`、`notes`，再在页面层用 `getCollection()` 读取并传给列表、卡片和布局组件。
 
 ## docs
 
-`docs` 用于说明书。它按 `order` 升序排列，不用日期决定顺序，适合放安装、配置、迁移和发布说明。
+`docs` 是示例站里的说明书集合。它按 `order` 升序排列，不用日期决定顺序，适合放安装、配置、迁移和发布说明。
 
 ```yaml
 title: 先把样报跑起来
@@ -30,7 +32,7 @@ updated: 2026-06-14
 
 ## articles
 
-`articles` 用于普通文章、专栏、札记和更新日志。列表页按 `date` 倒序排列，`tags` 会进入左侧索引词筛选。
+`articles` 是示例站里的文章集合，用于普通文章、专栏、札记和更新日志。列表页按 `date` 倒序排列，`tags` 会进入左侧索引词筛选。
 
 ```yaml
 title: 给长文留出索引词和目次
@@ -49,7 +51,7 @@ tags: ["Astro", "Theme"]
 
 ## projects
 
-`projects` 用于作品、产品、案例或主题样张。它比文章多一些结构化字段，因为项目页要承担“展示价值”的任务：一句话摘要、档案栏、功能分栏、迭代记录和截图区域都可能用到。
+`projects` 是示例站里的案例集合，用于作品、产品、案例或主题样张。它比文章多一些结构化字段，因为项目页要承担“展示价值”的任务：一句话摘要、档案栏、功能分栏、迭代记录和截图区域都可能用到。
 
 常用字段包括 `subtitle`、`deck`、`platform`、`status`、`year`、`order`、`featured`、`accent`、`stack`、`facts`、`features`、`timeline`、`screenshots` 和 `links`。
 
@@ -67,6 +69,21 @@ featured: false
 ```
 
 首页会优先展示 `featured: true` 的案例。如果多个案例都标记为 featured，当前会取排序后的第一个。
+
+## 换成自己的集合名
+
+如果你的站点只有博客文章，可以只保留 `posts`；如果你想放作品，可以用 `works`；如果你偏向日常札记，也可以叫 `notes`。主题不会要求你必须创建 `docs/articles/projects`。
+
+需要改的地方主要在页面层：
+
+```ts
+import { getCollection } from "astro:content";
+import { sortByDateDesc } from "astro-newspaper-theme/lib/format";
+
+const posts = sortByDateDesc(await getCollection("posts"));
+```
+
+只要你的页面把整理好的数据传给主题组件，collection 名字本身不会影响主题运行。`astro-newspaper-theme/lib/format` 里提供的 `sortByDateDesc`、`sortByOrder`、`pickFeatured` 和 `takeLatest` 都不绑定具体集合名。
 
 ## 图片和 MDX 组件
 

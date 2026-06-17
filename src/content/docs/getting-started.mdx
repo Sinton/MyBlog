@@ -27,11 +27,13 @@ pnpm dev
 
 第一处是 `src/theme.config.ts`，改站点标题、副标题、描述、导航、社交链接、版次和时区。大部分站点身份都在这里。
 
-第二处是 `src/content`，把样稿替换成自己的内容：
+第二处是 `src/content`，把样稿替换成自己的内容。示例站默认用了这三类集合：
 
 - `docs` 放主题说明、产品说明或长期维护的说明页。
 - `articles` 放普通文章、专栏、札记和更新日志。
 - `projects` 放作品、案例、产品介绍或模板样张。
+
+这些名字不是主题强约束。如果你的博客只有文章，可以改成 `posts`；如果你想做作品集，可以用 `works`；如果你偏向日常记录，也可以叫 `notes`。真正需要调整的是页面里的 `getCollection()` 查询和对应的数据传递，主题组件本身不要求固定集合名。
 
 第三处是 `README.md`，把项目介绍、安装方式和发布说明换成自己的。
 
@@ -56,6 +58,17 @@ tags: ["Writing", "Astro"]
 ```
 
 保存后打开 `/articles/`，新文章会自动进入列表。
+
+如果你把集合名改成 `posts`，页面层可以这样处理：
+
+```ts
+import { getCollection } from "astro:content";
+import { sortByDateDesc } from "astro-newspaper-theme/lib/format";
+
+const posts = sortByDateDesc(await getCollection("posts"));
+```
+
+这类工具只按字段排序或截取，不绑定 `articles`、`projects` 这类示例名称。
 
 ## 新增一个案例
 
