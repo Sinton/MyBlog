@@ -1,4 +1,5 @@
 ---
+import "@fontsource/zhi-mang-xing";
 import "../styles/global.css";
 import BackToTop from "../components/BackToTop.astro";
 import SmoothScroll from "../components/SmoothScroll.astro";
@@ -6,9 +7,6 @@ import {
   defaultThemeConfig,
   type NewspaperThemeConfig,
 } from "../lib/theme-config";
-import mastheadFontWoBaoUrl from "@fontsource/zhi-mang-xing/files/zhi-mang-xing-118-400-normal.woff2?url";
-import mastheadFontDeUrl from "@fontsource/zhi-mang-xing/files/zhi-mang-xing-119-400-normal.woff2?url";
-import mastheadFontWanUrl from "@fontsource/zhi-mang-xing/files/zhi-mang-xing-114-400-normal.woff2?url";
 import jetbrainsMonoUrl from "@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2?url";
 
 interface Props {
@@ -25,38 +23,11 @@ const pageTitle =
 
 const fontFaceCss = `
 @font-face {
-  font-family: "Newspaper Masthead Calligraphy";
-  font-style: normal;
-  font-display: block;
-  font-weight: 400;
-  src: url("${mastheadFontWoBaoUrl}") format("woff2");
-  unicode-range: U+6211, U+62A5;
-}
-
-@font-face {
   font-family: "JetBrains Mono";
   font-style: normal;
   font-display: swap;
   font-weight: 400;
   src: url("${jetbrainsMonoUrl}") format("woff2");
-}
-
-@font-face {
-  font-family: "Newspaper Masthead Calligraphy";
-  font-style: normal;
-  font-display: block;
-  font-weight: 400;
-  src: url("${mastheadFontDeUrl}") format("woff2");
-  unicode-range: U+7684;
-}
-
-@font-face {
-  font-family: "Newspaper Masthead Calligraphy";
-  font-style: normal;
-  font-display: block;
-  font-weight: 400;
-  src: url("${mastheadFontWanUrl}") format("woff2");
-  unicode-range: U+665A;
 }
 `;
 ---
@@ -67,9 +38,6 @@ const fontFaceCss = `
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <link rel="preload" href={mastheadFontWoBaoUrl} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={mastheadFontDeUrl} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={mastheadFontWanUrl} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={jetbrainsMonoUrl} as="font" type="font/woff2" crossorigin />
     <style is:inline set:html={fontFaceCss}></style>
     <title>{pageTitle}</title>

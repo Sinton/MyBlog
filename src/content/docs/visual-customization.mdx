@@ -12,7 +12,7 @@ updated: 2026-06-15
 
 站点名、副标题、导航、版次和社交链接都在 `src/theme.config.ts`。如果只是换站点身份，不需要动组件。
 
-报头可见的四个大字在 `src/components/Masthead.astro`。主题默认按四字中文报头设计，如果你要换成两个字、五个字或英文刊名，需要同步调整 `masthead__title` 和 `masthead__glyph` 相关样式。
+报头大字默认读取 `siteTitle`，会自动拆字排版。只有当你想逐字微调刊名的宽窄、重心或墨印感时，才需要配置 `mastheadGlyphs`；比如给某个字加 `tone: "strong"`，或给偏宽的字加 `tone: "narrow"`。
 
 ## 再改颜色
 

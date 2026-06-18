@@ -10,7 +10,7 @@ updated: 2026-06-14
 
 ## 报头信息
 
-`siteTitle` 用于 `<title>`、默认描述和报头的可访问文本。当前可见的大标题仍在 `src/components/Masthead.astro` 里按四个字分别排版，这是为了精确控制报头字形。
+`siteTitle` 用于 `<title>`、默认描述、报头可访问文本和顶部可见的大刊名。默认情况下，只改这一项就能换掉报头标题。
 
 `siteSubtitle` 显示在顶部黑条，`issue`、`since`、`location` 和 `frequency` 显示在报头两侧。
 
@@ -27,16 +27,31 @@ export const themeConfig = {
 };
 ```
 
-如果你要把“我的晚报”改成另一个四字报头，先改 `themeConfig.siteTitle`，再到 `Masthead.astro` 替换四个 `masthead__glyph` 文本。这样既保留配置能力，也保留原来的手工报头味道。
+如果你只想把“我的晚报”换成自己的刊名，不需要改组件：
 
-```astro
-<span class="masthead__glyph masthead__glyph--wo">我</span>
-<span class="masthead__glyph masthead__glyph--de">的</span>
-<span class="masthead__glyph masthead__glyph--wan">晚</span>
-<span class="masthead__glyph masthead__glyph--bao">报</span>
+```ts
+export const themeConfig = {
+  siteTitle: "阿通周报",
+};
 ```
 
-如果不是四字报头，需要同步调整 `Masthead.astro` 和对应 CSS。主题默认先服务四字中文报头。
+主题会自动把 `siteTitle` 拆成单字渲染，并保留旧报纸题头的紧凑排版。
+
+如果你想逐字微调报头，可以使用 `mastheadGlyphs`。它会覆盖默认的 `siteTitle` 拆字渲染：
+
+```ts
+export const themeConfig = {
+  siteTitle: "阿通周报",
+  mastheadGlyphs: [
+    { text: "阿", tone: "strong" },
+    { text: "通" },
+    { text: "周", tone: "wide" },
+    { text: "报", tone: "strong" },
+  ],
+};
+```
+
+`tone` 是可选项，支持 `default`、`narrow`、`wide` 和 `strong`。普通站点不需要配置它；只有想调整某个字的宽窄或墨印感时再使用。
 
 ## 导航
 

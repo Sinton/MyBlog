@@ -263,7 +263,7 @@
   }
 
   .masthead__title {
-    font-size: clamp(3.1rem, 14vw, 5.2rem);
+    font-size: var(--masthead-mobile-title-size, clamp(2.45rem, 14vw, 5.2rem));
     letter-spacing: 0;
     transform: none;
   }

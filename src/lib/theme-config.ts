@@ -8,6 +8,11 @@ export type ThemeSocialLink = {
   href: string;
 };
 
+export type MastheadGlyph = {
+  text: string;
+  tone?: "default" | "narrow" | "wide" | "strong";
+};
+
 export type NewspaperThemeConfig = {
   siteTitle: string;
   siteSubtitle: string;
@@ -20,6 +25,7 @@ export type NewspaperThemeConfig = {
   timezone: string;
   backToTopLabel: string;
   enableSmoothScroll: boolean;
+  mastheadGlyphs?: MastheadGlyph[];
   navItems: ThemeNavItem[];
   socialLinks: ThemeSocialLink[];
 };

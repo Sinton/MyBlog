@@ -1,6 +1,7 @@
 ---
 import {
   defaultThemeConfig,
+  type MastheadGlyph,
   type NewspaperThemeConfig,
 } from "../lib/theme-config";
 
@@ -28,6 +29,16 @@ const githubLink =
 const xLink =
   config.socialLinks.find((link) => ["x", "twitter"].includes(link.label.toLowerCase())) ??
   config.socialLinks[1];
+const glyphs: MastheadGlyph[] =
+  config.mastheadGlyphs?.length
+    ? config.mastheadGlyphs
+    : Array.from(config.siteTitle).map((text) => ({ text }));
+const glyphCount = Math.max(glyphs.length, 1);
+const mastheadTitleStyle = [
+  `--masthead-glyph-count: ${glyphCount}`,
+  `--masthead-title-size: clamp(3.6rem, ${45.6 / glyphCount}vw, 10.5rem)`,
+  `--masthead-mobile-title-size: clamp(2.45rem, ${56 / glyphCount}vw, 5.2rem)`,
+].join("; ");
 ---
 
 <header class="masthead">
@@ -65,11 +76,24 @@ const xLink =
       <strong>{config.since}</strong>
       <span>{config.location}</span>
     </div>
-    <a class="masthead__title" href="/" aria-label={`${config.siteTitle}首页`}>
-      <span class="masthead__glyph masthead__glyph--wo">我</span>
-      <span class="masthead__glyph masthead__glyph--de">的</span>
-      <span class="masthead__glyph masthead__glyph--wan">晚</span>
-      <span class="masthead__glyph masthead__glyph--bao">报</span>
+    <a
+      class="masthead__title"
+      href="/"
+      aria-label={`${config.siteTitle}首页`}
+      style={mastheadTitleStyle}
+    >
+      {
+        glyphs.map((glyph) => (
+          <span
+            class:list={[
+              "masthead__glyph",
+              glyph.tone && glyph.tone !== "default" && `masthead__glyph--${glyph.tone}`,
+            ]}
+          >
+            {glyph.text}
+          </span>
+        ))
+      }
     </a>
     <div class="masthead__sidebox">
       <span>版次</span>
