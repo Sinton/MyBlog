@@ -263,9 +263,21 @@
   }
 
   .masthead__title {
-    font-size: var(--masthead-mobile-title-size, clamp(2.45rem, 14vw, 5.2rem));
+    block-size: calc(var(--masthead-mobile-title-size, clamp(2.45rem, 14vw, 5.2rem)) * 0.98 + 18px);
     letter-spacing: 0;
     transform: none;
+  }
+
+  .masthead__glyph {
+    font-size: var(--masthead-mobile-title-size, clamp(2.45rem, 14vw, 5.2rem));
+  }
+
+  .masthead__glyph:nth-child(2) {
+    font-size: calc(var(--masthead-mobile-title-size, clamp(2.45rem, 14vw, 5.2rem)) * 0.98);
+  }
+
+  .masthead__glyph--narrow {
+    font-size: calc(var(--masthead-mobile-title-size, clamp(2.45rem, 14vw, 5.2rem)) * 0.96);
   }
 
   .masthead__nav {

@@ -10,6 +10,7 @@ html {
     var(--paper-deep);
   background-size: auto, 7px 7px, auto;
   font-family: var(--serif);
+  scrollbar-gutter: stable;
 }
 
 body {
