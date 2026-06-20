@@ -34,11 +34,14 @@ const glyphs: MastheadGlyph[] =
     ? config.mastheadGlyphs
     : Array.from(config.siteTitle).map((text) => ({ text }));
 const glyphCount = Math.max(glyphs.length, 1);
-const mastheadTitleStyle = [
-  `--masthead-glyph-count: ${glyphCount}`,
-  `--masthead-title-size: clamp(3.6rem, ${45.6 / glyphCount}vw, 10.5rem)`,
-  `--masthead-mobile-title-size: clamp(2.45rem, ${56 / glyphCount}vw, 5.2rem)`,
-].join("; ");
+const mastheadTitleStyle =
+  glyphCount === 4
+    ? undefined
+    : [
+        `--masthead-glyph-count: ${glyphCount}`,
+        `--masthead-title-size: clamp(${Math.min(5, 20 / glyphCount)}rem, ${45.6 / glyphCount}vw, 10.5rem)`,
+        `--masthead-mobile-title-size: clamp(2.45rem, ${56 / glyphCount}vw, 5.2rem)`,
+      ].join("; ");
 ---
 
 <header class="masthead">
@@ -77,16 +80,18 @@ const mastheadTitleStyle = [
       <span>{config.location}</span>
     </div>
     <a
-      class="masthead__title"
+      class:list={["masthead__title", glyphCount !== 4 && "masthead__title--dynamic"]}
       href="/"
       aria-label={`${config.siteTitle}首页`}
       style={mastheadTitleStyle}
     >
       {
-        glyphs.map((glyph) => (
+        glyphs.map((glyph, index) => (
           <span
             class:list={[
               "masthead__glyph",
+              `masthead__glyph--slot-${index + 1}`,
+              index === glyphs.length - 1 && glyphs.length > 1 && "masthead__glyph--last",
               glyph.tone && glyph.tone !== "default" && `masthead__glyph--${glyph.tone}`,
             ]}>{glyph.text}</span>
         ))

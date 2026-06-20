@@ -102,23 +102,20 @@
 
 .masthead__title {
   --masthead-glyph-count: 4;
-  --masthead-title-size: clamp(3.6rem, 11.4vw, 10.5rem);
   display: flex;
-  block-size: calc(var(--masthead-title-size) * 0.98 + 22px);
   min-width: 0;
   align-items: center;
   justify-content: center;
   border-top: 2px solid var(--ink);
   border-bottom: 2px solid var(--ink);
-  padding: 0;
+  padding: 6px 0 12px;
   font-family: var(--masthead-font);
-  font-size: 0;
+  font-size: clamp(5rem, 11.4vw, 10.5rem);
   font-weight: 400;
   line-height: 0.86;
   text-align: center;
   letter-spacing: 0;
   white-space: nowrap;
-  overflow: visible;
   transform: none;
   transform-origin: center;
   text-shadow:
@@ -129,11 +126,13 @@
     2px 1px 0 rgba(23, 19, 15, 0.08);
 }
 
+.masthead__title--dynamic {
+  font-size: var(--masthead-title-size);
+}
+
 .masthead__glyph {
   display: inline-block;
-  font-size: var(--masthead-title-size);
   line-height: 0.86;
-  margin-right: -0.055em;
   -webkit-text-stroke: 0.35px rgba(23, 19, 15, 0.36);
   paint-order: stroke fill;
   text-shadow:
@@ -143,32 +142,34 @@
     0 -1px 0 rgba(23, 19, 15, 0.12),
     1px 1px 0 rgba(23, 19, 15, 0.14),
     0 2px 0 rgba(23, 19, 15, 0.12);
-  transform: translateY(0.018em);
   transform-origin: center 56%;
 }
 
-.masthead__glyph:last-child {
-  margin-right: 0;
+.masthead__glyph--slot-1 {
+  margin-right: -0.055em;
+  transform: translateY(0.018em);
 }
 
-.masthead__glyph:nth-child(2) {
+.masthead__glyph--slot-2 {
   margin-right: -0.065em;
-  font-size: calc(var(--masthead-title-size) * 0.98);
+  font-size: 0.98em;
   transform: translateY(0.028em);
 }
 
-.masthead__glyph:nth-child(3) {
+.masthead__glyph--slot-3 {
+  margin-right: -0.055em;
   transform: translateY(0.02em);
 }
 
-.masthead__glyph:last-child:not(:first-child) {
+.masthead__glyph--last {
+  margin-right: 0;
   margin-left: -0.025em;
   transform: translateY(0.006em);
 }
 
 .masthead__glyph--narrow {
   margin-right: -0.075em;
-  font-size: calc(var(--masthead-title-size) * 0.96);
+  font-size: 0.96em;
   transform: scaleX(0.94) translateY(0.026em);
 }
 

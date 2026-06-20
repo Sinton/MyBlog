@@ -263,21 +263,22 @@
   }
 
   .masthead__title {
-    block-size: calc(var(--masthead-mobile-title-size, clamp(2.45rem, 14vw, 5.2rem)) * 0.98 + 18px);
+    padding: 6px 0 10px;
+    font-size: clamp(2.45rem, 14vw, 5.2rem);
     letter-spacing: 0;
     transform: none;
   }
 
-  .masthead__glyph {
+  .masthead__title--dynamic {
     font-size: var(--masthead-mobile-title-size, clamp(2.45rem, 14vw, 5.2rem));
   }
 
-  .masthead__glyph:nth-child(2) {
-    font-size: calc(var(--masthead-mobile-title-size, clamp(2.45rem, 14vw, 5.2rem)) * 0.98);
+  .masthead__glyph--slot-2 {
+    font-size: 0.98em;
   }
 
   .masthead__glyph--narrow {
-    font-size: calc(var(--masthead-mobile-title-size, clamp(2.45rem, 14vw, 5.2rem)) * 0.96);
+    font-size: 0.96em;
   }
 
   .masthead__nav {
