@@ -55,7 +55,12 @@ import "lenis/dist/lenis.css";
       smoothWheel: true,
       syncTouch: false,
       prevent: (node) =>
-        node instanceof Element && Boolean(node.closest("[data-horizontal-scroll]")),
+        node instanceof Element &&
+        Boolean(
+          node.closest(
+            "[data-native-scroll], [data-lenis-prevent], [data-lenis-prevent-wheel], [data-horizontal-scroll]",
+          ),
+        ),
     });
 
     window.__newspaperSmoothScroll = {

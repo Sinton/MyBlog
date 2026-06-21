@@ -46,7 +46,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
               <span>目</span>
               <span>次</span>
             </button>
-            <nav class="article-toc__panel">
+            <nav class="article-toc__panel" data-native-scroll data-lenis-prevent-wheel>
               <strong>本篇目次</strong>
               <ol>
                 {tocHeadings.map((heading, index) => (

@@ -245,8 +245,11 @@
     inset 0 0 0 4px rgba(248, 239, 220, 0.36);
   opacity: 0;
   overflow: auto;
+  overscroll-behavior: contain;
   padding: 12px 14px 14px;
   pointer-events: auto;
+  scroll-behavior: auto;
+  scrollbar-gutter: stable;
   transform: translateX(8px);
   transition:
     opacity 160ms ease,
