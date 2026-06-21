@@ -94,6 +94,14 @@
 
   .article-toc__panel strong {
     border-bottom-width: 1px;
+    background: transparent;
+    padding: 0 0 7px;
+  }
+
+  .article-toc__list {
+    max-height: none;
+    overflow: visible;
+    padding: 0;
   }
 
   .tech-diagram__flow--steps {

@@ -57,16 +57,18 @@ const olderArticle =
             </button>
             <nav class="article-toc__panel" data-native-scroll data-lenis-prevent-wheel>
               <strong>本篇目次</strong>
-              <ol>
-                {tocHeadings.map((heading, index) => (
-                  <li>
-                    <a href={`#${heading.slug}`}>
-                      <span>{index + 1}</span>
-                      <em>{heading.text}</em>
-                    </a>
-                  </li>
-                ))}
-              </ol>
+              <div class="article-toc__list" data-native-scroll data-lenis-prevent-wheel>
+                <ol>
+                  {tocHeadings.map((heading, index) => (
+                    <li>
+                      <a href={`#${heading.slug}`}>
+                        <span>{index + 1}</span>
+                        <em>{heading.text}</em>
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </div>
             </nav>
           </aside>
         )
