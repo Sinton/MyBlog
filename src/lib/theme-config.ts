@@ -13,6 +13,8 @@ export type MastheadGlyph = {
   tone?: "default" | "narrow" | "wide" | "strong";
 };
 
+export type TocNumberStyle = "chinese" | "decimal";
+
 export type NewspaperThemeConfig = {
   siteTitle: string;
   siteSubtitle: string;
@@ -25,6 +27,7 @@ export type NewspaperThemeConfig = {
   timezone: string;
   backToTopLabel: string;
   enableSmoothScroll: boolean;
+  tocNumberStyle: TocNumberStyle;
   mastheadGlyphs?: MastheadGlyph[];
   navItems: ThemeNavItem[];
   socialLinks: ThemeSocialLink[];
@@ -42,6 +45,7 @@ export const defaultThemeConfig: NewspaperThemeConfig = {
   timezone: "Asia/Shanghai",
   backToTopLabel: "回到刊首",
   enableSmoothScroll: true,
+  tocNumberStyle: "chinese",
   navItems: [
     { label: "头版", href: "/" },
     { label: "案例", href: "/projects/" },

@@ -24,6 +24,7 @@ export const themeConfig = {
   frequency: "周刊",
   backToTopLabel: "回到刊首",
   enableSmoothScroll: true,
+  tocNumberStyle: "chinese",
 };
 ```
 
@@ -102,5 +103,23 @@ export const themeConfig = {
 ```ts
 export const themeConfig = {
   backToTopLabel: "回到刊首",
+};
+```
+
+## 文章目次
+
+文章页和说明书页会根据二级标题生成右侧目次。默认序号使用中文数字，更贴近旧报纸的竖排索引感：
+
+```ts
+export const themeConfig = {
+  tocNumberStyle: "chinese",
+};
+```
+
+如果你更喜欢技术文档常见的数字序号，可以切换成：
+
+```ts
+export const themeConfig = {
+  tocNumberStyle: "decimal",
 };
 ```

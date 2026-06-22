@@ -13,6 +13,7 @@ export const themeConfig: NewspaperThemeConfig = {
   timezone: "Asia/Shanghai",
   backToTopLabel: "回到刊首",
   enableSmoothScroll: true,
+  tocNumberStyle: "chinese",
   navItems: [
     { label: "头版", href: "/" },
     { label: "案例", href: "/projects/" },

@@ -41,6 +41,8 @@ pnpm dev
 
 如果只是想试排版，不需要先重构组件。报头、列表、标签、文章目次和案例档案已经能撑起一版完整主题。
 
+文章目次默认使用中文序号。如果你想换成 `1 / 2 / 3` 这种数字序号，可以在 `src/theme.config.ts` 里把 `tocNumberStyle` 改成 `"decimal"`。
+
 ## 新增一篇文章
 
 在 `src/content/articles` 新建一个 `.mdx` 文件，例如 `my-first-column.mdx`：

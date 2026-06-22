@@ -3,7 +3,7 @@ import { getCollection, render, type CollectionEntry } from "astro:content";
 import BaseLayout from "astro-newspaper-theme/layouts/BaseLayout.astro";
 import Masthead from "astro-newspaper-theme/components/Masthead.astro";
 import StampTag from "astro-newspaper-theme/components/StampTag.astro";
-import { formatDate, sortByDateDesc } from "astro-newspaper-theme/lib/format";
+import { formatDate, formatTocNumber, sortByDateDesc } from "astro-newspaper-theme/lib/format";
 import { themeConfig } from "@/theme.config";
 
 export async function getStaticPaths() {
@@ -62,7 +62,7 @@ const olderArticle =
                   {tocHeadings.map((heading, index) => (
                     <li>
                       <a href={`#${heading.slug}`}>
-                        <span>{index + 1}</span>
+                        <span>{formatTocNumber(index + 1, themeConfig.tocNumberStyle)}</span>
                         <em>{heading.text}</em>
                       </a>
                     </li>
