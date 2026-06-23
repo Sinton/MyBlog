@@ -199,7 +199,7 @@
 .article-toc {
   position: fixed;
   top: 42vh;
-  right: var(--article-toc-right, max(18px, calc((100vw - 1240px) / 2 + 2px)));
+  right: var(--article-toc-right, var(--paper-side-rail-right));
   z-index: 8;
   width: 36px;
   pointer-events: none;
@@ -211,6 +211,7 @@
   width: 36px;
   min-width: 36px;
   border: 1px solid var(--line-strong);
+  border-right: 0;
   background:
     linear-gradient(rgba(248, 239, 220, 0.9), rgba(248, 239, 220, 0.9)),
     repeating-linear-gradient(90deg, rgba(23, 19, 15, 0.03) 0 1px, transparent 1px 10px);

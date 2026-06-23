@@ -3,6 +3,12 @@
 }
 
 html {
+  --paper-shell-max: 1240px;
+  --paper-shell-gutter: 16px;
+  --paper-shell-border: 2px;
+  --paper-shell-edge: max(var(--paper-shell-gutter), calc((100vw - var(--paper-shell-max)) / 2));
+  --paper-side-rail-right: calc(var(--paper-shell-edge) + var(--paper-shell-border));
+
   color: var(--ink);
   background:
     radial-gradient(circle at 20% 10%, rgba(158, 47, 36, 0.1), transparent 24rem),
@@ -49,16 +55,16 @@ p {
 }
 
 .paper-shell {
-  width: min(1240px, calc(100% - 32px));
-  min-height: calc(100vh - 32px);
-  margin: 16px auto;
+  width: min(var(--paper-shell-max), calc(100% - var(--paper-shell-gutter) - var(--paper-shell-gutter)));
+  min-height: calc(100vh - var(--paper-shell-gutter) - var(--paper-shell-gutter));
+  margin: var(--paper-shell-gutter) auto;
   padding: clamp(18px, 3vw, 38px);
   background:
     radial-gradient(circle at 80% 18%, rgba(23, 19, 15, 0.08), transparent 18rem),
     repeating-linear-gradient(90deg, rgba(23, 19, 15, 0.035) 0 1px, transparent 1px 18px),
     linear-gradient(rgba(31, 26, 20, 0.035), rgba(31, 26, 20, 0.035)),
     var(--paper-light);
-  border: 2px solid var(--line-strong);
+  border: var(--paper-shell-border) solid var(--line-strong);
   box-shadow:
     0 0 0 8px rgba(248, 239, 220, 0.55),
     0 24px 80px var(--shadow);

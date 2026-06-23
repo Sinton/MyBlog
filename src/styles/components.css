@@ -1,6 +1,6 @@
 .back-to-top {
   position: fixed;
-  right: max(18px, calc((100vw - 1240px) / 2 + 18px));
+  right: var(--back-to-top-right, var(--paper-side-rail-right));
   bottom: 24px;
   z-index: 32;
   display: inline-flex;
@@ -9,6 +9,7 @@
   gap: 6px;
   min-width: 34px;
   border: 1px solid var(--line-strong);
+  border-right: 0;
   border-top: 3px solid var(--ink);
   background:
     repeating-linear-gradient(90deg, rgba(23, 19, 15, 0.025) 0 1px, transparent 1px 10px),
@@ -61,6 +62,10 @@
 }
 
 @media (max-width: 860px) {
+  html {
+    --paper-shell-gutter: 8px;
+  }
+
   .article-toc {
     position: static;
     display: block;
@@ -237,7 +242,7 @@
   }
 
   .back-to-top {
-    right: 14px;
+    right: var(--back-to-top-right, var(--paper-side-rail-right));
     bottom: 14px;
     min-width: 32px;
     padding: 8px 6px;
