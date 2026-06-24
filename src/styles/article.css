@@ -310,8 +310,9 @@
 
 .article-toc__panel a {
   display: grid;
-  grid-template-columns: 24px minmax(0, 1fr);
-  gap: 8px;
+  grid-template-columns: 30px minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
   padding: 8px 0;
   color: var(--ink-soft);
   line-height: 1.45;
@@ -326,6 +327,9 @@
   font-family: var(--kai);
   font-size: 0.82rem;
   font-weight: 800;
+  justify-self: start;
+  line-height: 1.1;
+  white-space: nowrap;
 }
 
 .article-toc__panel em {

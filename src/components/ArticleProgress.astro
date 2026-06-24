@@ -1,0 +1,57 @@
+---
+interface Props {
+  targetSelector?: string;
+}
+
+const { targetSelector = "[data-article-body]" } = Astro.props;
+---
+
+<div
+  class="article-progress"
+  data-article-progress
+  data-target-selector={targetSelector}
+  aria-hidden="true"
+>
+  <span></span>
+</div>
+
+<script>
+  const progressRoots = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-article-progress]"),
+  );
+
+  progressRoots.forEach((progressRoot) => {
+    const targetSelector =
+      progressRoot.dataset.targetSelector || "[data-article-body]";
+    const articleBody = document.querySelector<HTMLElement>(targetSelector);
+
+    if (!articleBody) {
+      return;
+    }
+
+    let ticking = false;
+
+    const updateProgress = () => {
+      const start = articleBody.offsetTop - window.innerHeight * 0.72;
+      const end = articleBody.offsetTop + articleBody.offsetHeight - window.innerHeight;
+      const range = Math.max(1, end - start);
+      const current = window.scrollY - start;
+      const progress = Math.min(1, Math.max(0, current / range));
+
+      progressRoot.style.setProperty("--article-progress", String(progress));
+      ticking = false;
+    };
+
+    const requestUpdate = () => {
+      if (!ticking) {
+        ticking = true;
+        window.requestAnimationFrame(updateProgress);
+      }
+    };
+
+    updateProgress();
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
+    window.addEventListener("load", requestUpdate, { once: true });
+  });
+</script>

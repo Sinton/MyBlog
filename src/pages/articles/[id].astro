@@ -1,6 +1,7 @@
 ---
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import BaseLayout from "astro-newspaper-theme/layouts/BaseLayout.astro";
+import ArticleProgress from "astro-newspaper-theme/components/ArticleProgress.astro";
 import ArticleReadMore from "astro-newspaper-theme/components/ArticleReadMore.astro";
 import ArticleToc from "astro-newspaper-theme/components/ArticleToc.astro";
 import Masthead from "astro-newspaper-theme/components/Masthead.astro";
@@ -65,9 +66,7 @@ const nextArticle = olderArticle
         }
       </header>
       <ArticleToc headings={tocHeadings} numberStyle={themeConfig.tocNumberStyle} />
-      <div class="article-progress" data-article-progress aria-hidden="true">
-        <span></span>
-      </div>
+      <ArticleProgress />
       <div class="prose" data-article-body>
         <Content />
       </div>
@@ -85,35 +84,3 @@ const nextArticle = olderArticle
     </article>
   </main>
 </BaseLayout>
-
-<script>
-  const progressRoot = document.querySelector<HTMLElement>("[data-article-progress]");
-  const articleBody = document.querySelector<HTMLElement>("[data-article-body]");
-
-  if (progressRoot && articleBody) {
-    let ticking = false;
-
-    const updateProgress = () => {
-      const start = articleBody.offsetTop - window.innerHeight * 0.72;
-      const end = articleBody.offsetTop + articleBody.offsetHeight - window.innerHeight;
-      const range = Math.max(1, end - start);
-      const current = window.scrollY - start;
-      const progress = Math.min(1, Math.max(0, current / range));
-
-      progressRoot.style.setProperty("--article-progress", String(progress));
-      ticking = false;
-    };
-
-    const requestUpdate = () => {
-      if (!ticking) {
-        ticking = true;
-        window.requestAnimationFrame(updateProgress);
-      }
-    };
-
-    updateProgress();
-    window.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", requestUpdate);
-    window.addEventListener("load", requestUpdate, { once: true });
-  }
-</script>

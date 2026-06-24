@@ -1,0 +1,151 @@
+---
+import { formatDate } from "../lib/format";
+import type { NewspaperThemeConfig } from "../lib/theme-config";
+
+type FilterEntry = {
+  id: string;
+  href: string;
+  title: string;
+  description: string;
+  date: Date;
+  category?: string;
+  tags: string[];
+};
+
+type FilterTerm = {
+  label: string;
+  tags: string[];
+  count: number;
+};
+
+interface Props {
+  entries: FilterEntry[];
+  label?: string;
+  filterLabel?: string;
+  allLabel?: string;
+  config?: NewspaperThemeConfig;
+}
+
+const {
+  entries,
+  label = "全部专栏",
+  filterLabel = "主题",
+  allLabel = "全部",
+  config,
+} = Astro.props;
+
+const terms: FilterTerm[] = Array.from(
+  new Set(entries.flatMap((entry) => entry.tags)),
+).map((termLabel) => ({
+  label: termLabel,
+  tags: [termLabel],
+  count: entries.filter((entry) => entry.tags.includes(termLabel)).length,
+}));
+---
+
+<section class="article-index-layout" data-article-filter>
+  <aside class="article-filter" aria-label="文章索引词">
+    <div class="article-filter__header">
+      <span class="section-kicker">{filterLabel}</span>
+    </div>
+    <div class="article-filter__terms">
+      <button type="button" class="is-active" data-filter-tag="all">
+        <span>{allLabel}</span>
+        <em>{entries.length}</em>
+      </button>
+      {
+        terms.map((term) => (
+          <button
+            type="button"
+            data-filter-tag={term.label}
+            data-filter-tags={JSON.stringify(term.tags)}
+          >
+            <span>{term.label}</span>
+            <em>{term.count}</em>
+          </button>
+        ))
+      }
+    </div>
+  </aside>
+
+  <section class="entry-list article-filter__list" aria-label={label}>
+    <div class="article-filter__list-heading">
+      <span class="section-kicker article-filter__list-label" data-article-filter-label>
+        {label}
+      </span>
+      <span class="sr-only" data-article-filter-count aria-live="polite">
+        本栏检出 {entries.length} 篇
+      </span>
+    </div>
+    {
+      entries.map((entry) => (
+        <article
+          class="entry-list__item"
+          data-article-entry
+          data-tags={JSON.stringify(entry.tags)}
+        >
+          <a href={entry.href}>
+            <span class="entry-list__date">{formatDate(entry.date, config)}</span>
+            <h3>{entry.title}</h3>
+            <p>{entry.description}</p>
+            {entry.category && <span class="entry-list__meta">{entry.category}</span>}
+          </a>
+        </article>
+      ))
+    }
+  </section>
+</section>
+
+<script>
+  document.querySelectorAll("[data-article-filter]").forEach((filterRoot) => {
+    const entries = Array.from(
+      filterRoot.querySelectorAll<HTMLElement>("[data-article-entry]"),
+    );
+    const countNode = filterRoot.querySelector("[data-article-filter-count]");
+    const labelNode = filterRoot.querySelector("[data-article-filter-label]");
+
+    if (!countNode || !labelNode) {
+      return;
+    }
+
+    const buttons = Array.from(
+      filterRoot.querySelectorAll("[data-filter-tag]"),
+    );
+
+    const setActiveTag = (tag: string) => {
+      let visibleCount = 0;
+
+      const activeButton = buttons.find(
+        (button) => button.getAttribute("data-filter-tag") === tag,
+      );
+      const filterTags = JSON.parse(
+        activeButton?.getAttribute("data-filter-tags") || "[]",
+      );
+
+      entries.forEach((entry) => {
+        const tags = JSON.parse(entry.getAttribute("data-tags") || "[]");
+        const isVisible =
+          tag === "all" ||
+          filterTags.some((filterTag: string) => tags.includes(filterTag));
+        entry.hidden = !isVisible;
+        if (isVisible) visibleCount += 1;
+      });
+
+      buttons.forEach((button) => {
+        button.classList.toggle(
+          "is-active",
+          button.getAttribute("data-filter-tag") === tag,
+        );
+      });
+
+      countNode.textContent = `本栏检出 ${visibleCount} 篇`;
+      labelNode.textContent = tag === "all" ? "全部专栏" : `索引词：${tag}`;
+    };
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        setActiveTag(button.getAttribute("data-filter-tag") || "all");
+      });
+    });
+  });
+</script>

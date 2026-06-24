@@ -22,7 +22,7 @@ export const themeConfig: NewspaperThemeConfig = {
     { label: "关于", href: "/about/" },
   ],
   socialLinks: [
-    { label: "GitHub", href: "https://github.com/" },
+    { label: "GitHub", href: "https://github.com/MyBlog" },
     { label: "X", href: "https://x.com/" },
   ],
 };
