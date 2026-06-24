@@ -1,9 +1,11 @@
 ---
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import BaseLayout from "astro-newspaper-theme/layouts/BaseLayout.astro";
+import ArticleReadMore from "astro-newspaper-theme/components/ArticleReadMore.astro";
+import ArticleToc from "astro-newspaper-theme/components/ArticleToc.astro";
 import Masthead from "astro-newspaper-theme/components/Masthead.astro";
 import StampTag from "astro-newspaper-theme/components/StampTag.astro";
-import { formatDate, formatTocNumber } from "astro-newspaper-theme/lib/format";
+import { formatDate } from "astro-newspaper-theme/lib/format";
 import { themeConfig } from "@/theme.config";
 
 export async function getStaticPaths() {
@@ -39,40 +41,11 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
           )
         }
       </header>
-      {
-        tocHeadings.length > 0 && (
-          <aside class="article-toc" aria-label="本文目录">
-            <button class="article-toc__tab" type="button" aria-label="展开本文目录">
-              <span>目</span>
-              <span>次</span>
-            </button>
-            <nav class="article-toc__panel" data-native-scroll data-lenis-prevent-wheel>
-              <strong>本篇目次</strong>
-              <div class="article-toc__list" data-native-scroll data-lenis-prevent-wheel>
-                <ol>
-                  {tocHeadings.map((heading, index) => (
-                    <li>
-                      <a href={`#${heading.slug}`}>
-                        <span>{formatTocNumber(index + 1, themeConfig.tocNumberStyle)}</span>
-                        <em>{heading.text}</em>
-                      </a>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            </nav>
-          </aside>
-        )
-      }
+      <ArticleToc headings={tocHeadings} numberStyle={themeConfig.tocNumberStyle} />
       <div class="prose">
         <Content />
       </div>
-      <footer class="article-readmore" aria-label="继续翻阅">
-        <div class="article-readmore__header">
-          <span class="section-kicker">继续翻阅</span>
-          <a href="/docs/">返回说明书</a>
-        </div>
-      </footer>
+      <ArticleReadMore indexHref="/docs/" indexLabel="返回说明书" />
     </article>
   </main>
 </BaseLayout>

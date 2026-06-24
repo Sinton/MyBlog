@@ -1,0 +1,80 @@
+---
+import { formatDate } from "../lib/format";
+import type { NewspaperThemeConfig } from "../lib/theme-config";
+
+type ReadMoreEntry = {
+  href: string;
+  title: string;
+  date?: Date;
+};
+
+interface Props {
+  indexHref: string;
+  indexLabel: string;
+  label?: string;
+  previous?: ReadMoreEntry | null;
+  next?: ReadMoreEntry | null;
+  config?: NewspaperThemeConfig;
+}
+
+const {
+  indexHref,
+  indexLabel,
+  label = "继续翻阅",
+  previous = null,
+  next = null,
+  config,
+} = Astro.props;
+const hasNavigation = Boolean(previous || next);
+---
+
+<footer class="article-readmore" aria-label={label}>
+  <div class="article-readmore__header">
+    <span class="section-kicker">{label}</span>
+    <a href={indexHref}>{indexLabel}</a>
+  </div>
+  {
+    hasNavigation && (
+      <div class="article-readmore__grid">
+        {previous ? (
+          <a
+            class="article-readmore__item article-readmore__item--nav article-readmore__item--prev"
+            href={previous.href}
+            title={previous.title}
+          >
+            <span>上一篇</span>
+            <strong>{previous.title}</strong>
+            {previous.date && <small>{formatDate(previous.date, config)}</small>}
+          </a>
+        ) : (
+          <div
+            class="article-readmore__item article-readmore__item--nav article-readmore__item--prev article-readmore__item--empty"
+            aria-disabled="true"
+          >
+            <span>上一篇</span>
+            <strong>已经是最新一篇</strong>
+          </div>
+        )}
+        {next ? (
+          <a
+            class="article-readmore__item article-readmore__item--nav article-readmore__item--next"
+            href={next.href}
+            title={next.title}
+          >
+            <span>下一篇</span>
+            <strong>{next.title}</strong>
+            {next.date && <small>{formatDate(next.date, config)}</small>}
+          </a>
+        ) : (
+          <div
+            class="article-readmore__item article-readmore__item--nav article-readmore__item--next article-readmore__item--empty"
+            aria-disabled="true"
+          >
+            <span>下一篇</span>
+            <strong>已经是最后一篇</strong>
+          </div>
+        )}
+      </div>
+    )
+  }
+</footer>

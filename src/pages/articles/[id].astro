@@ -1,9 +1,11 @@
 ---
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import BaseLayout from "astro-newspaper-theme/layouts/BaseLayout.astro";
+import ArticleReadMore from "astro-newspaper-theme/components/ArticleReadMore.astro";
+import ArticleToc from "astro-newspaper-theme/components/ArticleToc.astro";
 import Masthead from "astro-newspaper-theme/components/Masthead.astro";
 import StampTag from "astro-newspaper-theme/components/StampTag.astro";
-import { formatDate, formatTocNumber, sortByDateDesc } from "astro-newspaper-theme/lib/format";
+import { formatDate, sortByDateDesc } from "astro-newspaper-theme/lib/format";
 import { themeConfig } from "@/theme.config";
 
 export async function getStaticPaths() {
@@ -28,6 +30,20 @@ const olderArticle =
   currentIndex >= 0 && currentIndex < articles.length - 1
     ? articles[currentIndex + 1]
     : null;
+const previousArticle = newerArticle
+  ? {
+      href: `/articles/${newerArticle.id}/`,
+      title: newerArticle.data.title,
+      date: newerArticle.data.date,
+    }
+  : null;
+const nextArticle = olderArticle
+  ? {
+      href: `/articles/${olderArticle.id}/`,
+      title: olderArticle.data.title,
+      date: olderArticle.data.date,
+    }
+  : null;
 ---
 
 <BaseLayout title={entry.data.title} description={entry.data.description} config={themeConfig}>
@@ -48,31 +64,7 @@ const olderArticle =
           )
         }
       </header>
-      {
-        tocHeadings.length > 0 && (
-          <aside class="article-toc" aria-label="本文目录">
-            <button class="article-toc__tab" type="button" aria-label="展开本文目录">
-              <span>目</span>
-              <span>次</span>
-            </button>
-            <nav class="article-toc__panel" data-native-scroll data-lenis-prevent-wheel>
-              <strong>本篇目次</strong>
-              <div class="article-toc__list" data-native-scroll data-lenis-prevent-wheel>
-                <ol>
-                  {tocHeadings.map((heading, index) => (
-                    <li>
-                      <a href={`#${heading.slug}`}>
-                        <span>{formatTocNumber(index + 1, themeConfig.tocNumberStyle)}</span>
-                        <em>{heading.text}</em>
-                      </a>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            </nav>
-          </aside>
-        )
-      }
+      <ArticleToc headings={tocHeadings} numberStyle={themeConfig.tocNumberStyle} />
       <div class="article-progress" data-article-progress aria-hidden="true">
         <span></span>
       </div>
@@ -81,52 +73,13 @@ const olderArticle =
       </div>
       {
         articles.length > 1 && (
-          <footer class="article-readmore" aria-label="继续翻阅">
-            <div class="article-readmore__header">
-              <span class="section-kicker">继续翻阅</span>
-              <a href="/articles/">返回专栏</a>
-            </div>
-            <div class="article-readmore__grid">
-              {newerArticle ? (
-                <a
-                  class="article-readmore__item article-readmore__item--nav article-readmore__item--prev"
-                  href={`/articles/${newerArticle.id}/`}
-                  title={newerArticle.data.title}
-                >
-                  <span>上一篇</span>
-                  <strong>{newerArticle.data.title}</strong>
-                  <small>{formatDate(newerArticle.data.date, themeConfig)}</small>
-                </a>
-              ) : (
-                <div
-                  class="article-readmore__item article-readmore__item--nav article-readmore__item--prev article-readmore__item--empty"
-                  aria-disabled="true"
-                >
-                  <span>上一篇</span>
-                  <strong>已经是最新一篇</strong>
-                </div>
-              )}
-              {olderArticle ? (
-                <a
-                  class="article-readmore__item article-readmore__item--nav article-readmore__item--next"
-                  href={`/articles/${olderArticle.id}/`}
-                  title={olderArticle.data.title}
-                >
-                  <span>下一篇</span>
-                  <strong>{olderArticle.data.title}</strong>
-                  <small>{formatDate(olderArticle.data.date, themeConfig)}</small>
-                </a>
-              ) : (
-                <div
-                  class="article-readmore__item article-readmore__item--nav article-readmore__item--next article-readmore__item--empty"
-                  aria-disabled="true"
-                >
-                  <span>下一篇</span>
-                  <strong>已经是最后一篇</strong>
-                </div>
-              )}
-            </div>
-          </footer>
+          <ArticleReadMore
+            indexHref="/articles/"
+            indexLabel="返回专栏"
+            previous={previousArticle}
+            next={nextArticle}
+            config={themeConfig}
+          />
         )
       }
     </article>

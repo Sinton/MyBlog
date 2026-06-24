@@ -1,0 +1,44 @@
+---
+import { formatTocNumber } from "../lib/format";
+import type { TocNumberStyle } from "../lib/theme-config";
+
+type TocHeading = {
+  slug: string;
+  text: string;
+};
+
+interface Props {
+  headings: TocHeading[];
+  numberStyle?: TocNumberStyle;
+  label?: string;
+}
+
+const { headings, numberStyle = "chinese", label = "本篇目次" } = Astro.props;
+const tocHeadings = headings.filter((heading) => heading.slug && heading.text);
+---
+
+{
+  tocHeadings.length > 0 && (
+    <aside class="article-toc" aria-label="本文目录">
+      <button class="article-toc__tab" type="button" aria-label="展开本文目录">
+        <span>目</span>
+        <span>次</span>
+      </button>
+      <nav class="article-toc__panel" data-native-scroll data-lenis-prevent-wheel>
+        <strong>{label}</strong>
+        <div class="article-toc__list" data-native-scroll data-lenis-prevent-wheel>
+          <ol>
+            {tocHeadings.map((heading, index) => (
+              <li>
+                <a href={`#${heading.slug}`}>
+                  <span>{formatTocNumber(index + 1, numberStyle)}</span>
+                  <em>{heading.text}</em>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </nav>
+    </aside>
+  )
+}

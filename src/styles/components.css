@@ -66,49 +66,6 @@
     --paper-shell-gutter: 8px;
   }
 
-  .article-toc {
-    position: static;
-    display: block;
-    width: auto;
-    margin: 18px 0;
-    pointer-events: auto;
-  }
-
-  .article-toc__tab {
-    display: none;
-  }
-
-  .article-toc__panel {
-    position: static;
-    width: auto;
-    max-height: none;
-    border-top: 1px solid var(--line-strong);
-    border-right: 0;
-    border-bottom: 1px solid var(--line-strong);
-    border-left: 0;
-    background:
-      repeating-linear-gradient(90deg, rgba(23, 19, 15, 0.018) 0 1px, transparent 1px 12px),
-      rgba(248, 239, 220, 0.28);
-    box-shadow: none;
-    opacity: 1;
-    overflow: visible;
-    padding: 10px 0;
-    transform: none;
-    visibility: visible;
-  }
-
-  .article-toc__panel strong {
-    border-bottom-width: 1px;
-    background: transparent;
-    padding: 0 0 7px;
-  }
-
-  .article-toc__list {
-    max-height: none;
-    overflow: visible;
-    padding: 0;
-  }
-
   .tech-diagram__flow--steps {
     gap: 10px;
   }
@@ -478,10 +435,6 @@
 
   .prose pre code {
     font-size: 0.8rem;
-  }
-
-  .article-readmore__grid {
-    grid-template-columns: 1fr;
   }
 
   .article-filter {
