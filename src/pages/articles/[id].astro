@@ -48,7 +48,7 @@ const nextArticle = olderArticle
 ---
 
 <BaseLayout title={entry.data.title} description={entry.data.description} config={themeConfig}>
-  <Masthead config={themeConfig} />
+  <Masthead config={themeConfig} date={entry.data.date} />
   <main class="detail-page">
     <article class="column-page">
       <header class="column-page__header column-page__header--article">

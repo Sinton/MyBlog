@@ -7,21 +7,27 @@ import {
 
 interface Props {
   config?: NewspaperThemeConfig;
+  /** 传入内容的发布/更新日期（文章、文档详情页使用）。
+   * 不传时报头日期将在客户端水合为读者的本地当天时间。 */
+  date?: Date;
 }
 
-const { config = defaultThemeConfig } = Astro.props;
+const { config = defaultThemeConfig, date } = Astro.props;
+const isStaticDate = date !== undefined;
+
+const displayDate = date ?? new Date();
 
 const issueDate = new Intl.DateTimeFormat(config.lang, {
   year: "numeric",
   month: "long",
   day: "numeric",
   timeZone: config.timezone,
-}).format(new Date());
+}).format(displayDate);
 
 const issueWeekday = new Intl.DateTimeFormat(config.lang, {
   weekday: "long",
   timeZone: config.timezone,
-}).format(new Date());
+}).format(displayDate);
 
 const githubLink =
   config.socialLinks.find((link) => link.label.toLowerCase() === "github") ??
@@ -100,11 +106,46 @@ const mastheadTitleStyle =
     <div class="masthead__sidebox">
       <span>版次</span>
       <strong>{config.frequency}</strong>
-      <span class="masthead__date">
-        <span>{issueDate}</span>
-        <span>{issueWeekday}</span>
+      <span
+        class="masthead__date"
+        data-static-date={isStaticDate ? "true" : "false"}
+        data-lang={config.lang}
+        data-timezone={config.timezone}
+      >
+        <span class="js-masthead-date">{issueDate}</span>
+        <span class="js-masthead-weekday">{issueWeekday}</span>
       </span>
     </div>
+
+<script>
+  const container = document.querySelector<HTMLElement>(
+    '.masthead__date[data-static-date="false"]',
+  );
+
+  if (container) {
+    const dateEl  = container.querySelector(".js-masthead-date");
+    const weekEl  = container.querySelector(".js-masthead-weekday");
+    const lang     = container.dataset.lang     ?? "zh-CN";
+    const timezone = container.dataset.timezone ?? "Asia/Shanghai";
+    const now      = new Date();
+
+    if (dateEl) {
+      dateEl.textContent = new Intl.DateTimeFormat(lang, {
+        year:     "numeric",
+        month:    "long",
+        day:      "numeric",
+        timeZone: timezone,
+      }).format(now);
+    }
+
+    if (weekEl) {
+      weekEl.textContent = new Intl.DateTimeFormat(lang, {
+        weekday:  "long",
+        timeZone: timezone,
+      }).format(now);
+    }
+  }
+</script>
   </div>
   <nav class="masthead__nav" aria-label="Primary navigation">
     {
