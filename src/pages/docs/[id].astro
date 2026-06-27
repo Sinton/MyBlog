@@ -7,6 +7,7 @@ import Masthead from "astro-newspaper-theme/components/Masthead.astro";
 import StampTag from "astro-newspaper-theme/components/StampTag.astro";
 import { formatDate } from "astro-newspaper-theme/lib/format";
 import { themeConfig } from "@/theme.config";
+import "../../styles/example.css";
 
 export async function getStaticPaths() {
   const docs = await getCollection("docs");

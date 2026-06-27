@@ -9,8 +9,6 @@ interface EntryItem {
     description: string;
     date: Date;
     category?: string;
-    location?: string;
-    region?: string;
   };
 }
 
@@ -23,16 +21,6 @@ interface Props {
 
 const { entries, basePath, label, config } = Astro.props;
 
-const categoryLabels: Record<string, string> = {
-  Editorial: "编者按",
-  Tech: "技术专栏",
-  Economics: "经济观察",
-};
-
-const displayMeta = (entry: EntryItem) => {
-  const meta = entry.data.category ?? entry.data.location ?? entry.data.region;
-  return meta ? (categoryLabels[meta] ?? meta) : "";
-};
 ---
 
 <section class="entry-list" aria-label={label}>
@@ -45,7 +33,7 @@ const displayMeta = (entry: EntryItem) => {
           <h3>{entry.data.title}</h3>
           <p>{entry.data.description}</p>
           <span class="entry-list__meta">
-            {displayMeta(entry)}
+            {entry.data.category ?? ""}
           </span>
         </a>
       </article>
