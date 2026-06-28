@@ -1,4 +1,4 @@
----
+﻿---
 import { formatDate } from "../lib/format";
 import type { NewspaperThemeConfig } from "../lib/theme-config";
 
@@ -23,6 +23,8 @@ interface Props {
   label?: string;
   filterLabel?: string;
   allLabel?: string;
+  countTemplate?: string; // 新增：支持数量展示模版，默认为 "本栏检出 {count} 篇"
+  filterPrefix?: string;  // 新增：支持过滤项前缀，默认为 "索引词："
   config?: NewspaperThemeConfig;
 }
 
@@ -31,6 +33,8 @@ const {
   label = "全部专栏",
   filterLabel = "主题",
   allLabel = "全部",
+  countTemplate = "本栏检出 {count} 篇",
+  filterPrefix = "索引词：",
   config,
 } = Astro.props;
 
@@ -43,7 +47,13 @@ const terms: FilterTerm[] = Array.from(
 }));
 ---
 
-<section class="article-index-layout" data-article-filter>
+<section
+  class="article-index-layout"
+  data-article-filter
+  data-label-all={label}
+  data-count-template={countTemplate}
+  data-filter-prefix={filterPrefix}
+>
   <aside class="article-filter" aria-label="文章索引词">
     <div class="article-filter__header">
       <span class="section-kicker">{filterLabel}</span>
@@ -98,6 +108,11 @@ const terms: FilterTerm[] = Array.from(
 
 <script>
   document.querySelectorAll("[data-article-filter]").forEach((filterRoot) => {
+    const rootEl = filterRoot as HTMLElement;
+    const labelAll = rootEl.dataset.labelAll || "全部专栏";
+    const countTemplate = rootEl.dataset.countTemplate || "本栏检出 {count} 篇";
+    const filterPrefix = rootEl.dataset.filterPrefix || "索引词：";
+
     const entries = Array.from(
       filterRoot.querySelectorAll<HTMLElement>("[data-article-entry]"),
     );
@@ -138,8 +153,8 @@ const terms: FilterTerm[] = Array.from(
         );
       });
 
-      countNode.textContent = `本栏检出 ${visibleCount} 篇`;
-      labelNode.textContent = tag === "all" ? "全部专栏" : `索引词：${tag}`;
+      countNode.textContent = countTemplate.replace("{count}", String(visibleCount));
+      labelNode.textContent = tag === "all" ? labelAll : `${filterPrefix}${tag}`;
     };
 
     buttons.forEach((button) => {

@@ -1,4 +1,4 @@
-import { defaultThemeConfig, type NewspaperThemeConfig } from "./lib/theme-config";
+﻿import { defaultThemeConfig, type NewspaperThemeConfig } from "./lib/theme-config";
 
 export const themeConfig: NewspaperThemeConfig = {
   ...defaultThemeConfig,

@@ -1,4 +1,4 @@
-.back-to-top {
+﻿.back-to-top {
   position: fixed;
   right: var(--back-to-top-right, var(--paper-side-rail-right));
   bottom: 24px;

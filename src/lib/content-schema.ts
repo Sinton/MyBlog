@@ -1,4 +1,4 @@
-import { z } from "astro/zod";
+﻿import { z } from "astro/zod";
 
 export const accentSchema = z.enum(["red", "blue", "green", "gold", "ink"]);
 

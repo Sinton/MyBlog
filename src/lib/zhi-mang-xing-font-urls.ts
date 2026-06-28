@@ -1,4 +1,4 @@
-import subset5Url from "@fontsource/zhi-mang-xing/files/zhi-mang-xing-5-400-normal.woff2?url";
+﻿import subset5Url from "@fontsource/zhi-mang-xing/files/zhi-mang-xing-5-400-normal.woff2?url";
 import subset6Url from "@fontsource/zhi-mang-xing/files/zhi-mang-xing-6-400-normal.woff2?url";
 import subset21Url from "@fontsource/zhi-mang-xing/files/zhi-mang-xing-21-400-normal.woff2?url";
 import subset22Url from "@fontsource/zhi-mang-xing/files/zhi-mang-xing-22-400-normal.woff2?url";

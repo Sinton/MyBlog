@@ -1,4 +1,4 @@
-import {
+﻿import {
   defaultThemeConfig,
   type NewspaperThemeConfig,
   type TocNumberStyle,

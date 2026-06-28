@@ -1,4 +1,4 @@
-.front-page {
+﻿.front-page {
   display: grid;
   grid-template-columns: minmax(0, 1.72fr) minmax(260px, 0.68fr);
   gap: 18px;

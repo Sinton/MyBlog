@@ -1,4 +1,4 @@
-import zhiMangXingUnicodeRanges from "@fontsource/zhi-mang-xing/unicode.json";
+﻿import zhiMangXingUnicodeRanges from "@fontsource/zhi-mang-xing/unicode.json";
 import { zhiMangXingFontUrlByFileName } from "./zhi-mang-xing-font-urls.ts";
 import type { NewspaperThemeConfig } from "./theme-config";
 
