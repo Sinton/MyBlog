@@ -1,4 +1,4 @@
-﻿---
+---
 interface Props {
   targetSelector?: string;
 }
@@ -49,9 +49,20 @@ const { targetSelector = "[data-article-body]" } = Astro.props;
       }
     };
 
+    let resizeTimeout: ReturnType<typeof setTimeout> | undefined;
+
+    const handleResize = () => {
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+      }
+      resizeTimeout = setTimeout(() => {
+        requestUpdate();
+      }, 150);
+    };
+
     updateProgress();
     window.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", requestUpdate);
+    window.addEventListener("resize", handleResize);
     window.addEventListener("load", requestUpdate, { once: true });
   });
 </script>
